@@ -22,7 +22,7 @@ function confirmLogin() {
         body: userBody,
     })
         .then(response => response.json())
-        .then(data => notLogged.value = data)
+        .then(data => notLogged.value = data);
 }
 </script>
 
@@ -32,6 +32,7 @@ function confirmLogin() {
         <input type="password" class="form-control mb-2" placeholder="Password" v-model="user.password"/>
         <button type="button" class="btn btn-primary w-100" :class="{'btn-danger': notLogged == false}" @click="confirmLogin">Login</button>
         <div class="text-center">
+            <p v-if="notLogged == true">Success!</p>
             <p v-if="notLogged == false" class="invalid ">Invalid credentials!</p>
         </div>
     </div>

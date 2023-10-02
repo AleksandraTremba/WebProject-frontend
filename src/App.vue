@@ -8,9 +8,9 @@ import RegistrationForm from './components/RegistrationForm.vue';
     </header>
     <main>
         <div class="mx-auto p-2" style="width: 280px;">
-            <!-- <LoginForm /> -->
+            <LoginForm />
+            <br>
             <RegistrationForm />
-            
         </div>
     </main>
 </template>

@@ -22,7 +22,7 @@ function confirmLogin() {
         body: userBody,
     })
         .then(response => response.json())
-        .then(data => isTaken.value = data)
+        .then((data) => isTaken.value = data)
 }
 </script>
 
@@ -32,6 +32,7 @@ function confirmLogin() {
         <input type="password" class="form-control mb-2" placeholder="Password" v-model="user.password"/>
         <button type="button" class="btn btn-primary w-100" :class="{'btn-warning': isTaken}" @click="confirmLogin">Register</button>
         <div class="text-center">
+            <p v-if="isTaken == false">Success!</p>
             <p v-if="isTaken" class="invalid ">This username is already taken!</p>
         </div>
     </div>
