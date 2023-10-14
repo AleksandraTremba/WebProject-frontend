@@ -4,7 +4,7 @@
     <div class="button-container">
       <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
       <button class="btn btn-primary" @click="stopTimer" :disabled="!isRunning">Stop</button>
-      <button class="btn btn-primary" @click="resetTimer" :disabled="!isRunning">Reset</button>
+      <button class="btn btn-primary" @click="resetTimer">Reset</button>
     </div>
   </div>
 </template>
