@@ -1,7 +1,18 @@
+<script setup>
+import LoginForm from './components/LoginForm.vue';
+import RegistrationForm from './components/RegistrationForm.vue';
+</script>
+
 <template>
-  <div id="app">
-    <TaskManager></TaskManager>
-  </div>
+    <header>
+    </header>
+    <main>
+        <div class="mx-auto p-2" style="width: 280px;">
+            <LoginForm />
+            <br>
+            <RegistrationForm />
+        </div>
+    </main>
 </template>
 
 <script>
@@ -16,30 +27,4 @@ export default {
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
