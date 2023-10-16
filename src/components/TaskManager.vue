@@ -7,8 +7,14 @@
       <div class="d-flex mt-5">
         <input
           type="text"
-          v-model="task"
-          placeholder="Enter task"
+          v-model="task.title"
+          placeholder="Enter task title"
+          class="w-100 form-control"
+        />
+        <input
+          type="text"
+          v-model="task.description"
+          placeholder="Enter task description"
           class="w-100 form-control"
         />
         <button class="btn btn-warning rounded-0" @click="submitTask">
@@ -21,6 +27,7 @@
         <thead>
           <tr>
             <th scope="col">Task</th>
+            <th scope="col">Description</th>
             <th scope="col" style="width: 120px">Status</th>
             <th scope="col" class="text-center">#</th>
             <th scope="col" class="text-center">#</th>
@@ -34,6 +41,9 @@
               </span>
             </td>
             <td>
+              {{ task.description }}
+            </td>
+            <td>
               <span
                 class="pointer noselect"
                 @click="changeStatus(index)"
@@ -43,11 +53,11 @@
                   'text-warning': task.status === 'in-progress',
                 }"
               >
-                {{ capitalizeFirstChar(task.status) }}
+              {{ task.status }}
               </span>
             </td>
             <td class="text-center">
-              <button class="btn btn-warning rounded-0" @click="deleteTask">
+              <button class="btn btn-warning rounded-0" @click="deleteTask(index)">
                 Delete
               </button>
             </td>
@@ -61,8 +71,11 @@
       </table>
     </div>
   </template>
-  
+
   <script>
+import axios from 'axios';
+
+const url = "http://localhost:8080/api";
   export default {
     name: "HelloWorld",
     props: {
@@ -71,7 +84,11 @@
   
     data() {
       return {
-        task: "",
+        task: {
+          id: 0,
+          title: "",
+          description: "",
+        },
         editedTask: null,
         statuses: ["to-do", "in-progress", "finished"],
   
@@ -79,61 +96,94 @@
         tasks: [],
       };
     },
+
+    created() {
+      this.loadTasks();
+    },
   
     methods: {
-      /**
-       * Capitalize first character
-       */
-      capitalizeFirstChar(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+      
+      async loadTasks() {
+        try {
+          const response = await axios.get(`${url}/tasks`);
+          this.tasks = response.data;
+        } catch (error) {
+          console.error("Error fetching tasks:", error)
+        }
       },
   
       /**
        * Change status of task by index
        */
       changeStatus(index) {
-        let newIndex = this.statuses.indexOf(this.tasks[index].status);
-        if (++newIndex > 2) newIndex = 0;
+        const currentIndex = this.statuses.indexOf(this.tasks[index].status);
+        const newIndex = (currentIndex + 1) % this.statuses.length;
         this.tasks[index].status = this.statuses[newIndex];
       },
-  
+
       /**
        * Deletes task by index
        */
-      deleteTask(index) {
-        this.tasks.splice(index, 1);
+      async deleteTask(index) {
+        if (this.tasks[index] && this.tasks[index].id) {
+          const taskId = this.tasks[index].id;  
+          try {
+            await axios.delete(`${url}/tasks/${taskId}`)
+            this.tasks.splice(index, 1);
+          } catch (error) {
+            console.error("Error deleting task:", error);
+          } 
+        } else {
+          console.error("Invalid task or missing ID.");
+        }
       },
   
       /**
        * Edit task
        */
       editTask(index) {
-        this.task = this.tasks[index].name;
+        this.task.title = this.tasks[index].title;
+        this.task.description = this.tasks[index].description;
         this.editedTask = index;
       },
   
       /**
        * Add / Update task
        */
-      submitTask() {
-        if (this.task.length === 0) return;
-  
-        /* We need to update the task */
-        if (this.editedTask != null) {
-          this.tasks[this.editedTask].name = this.task;
-          this.editedTask = null;
-        } else {
-          /* We need to add new task */
-          this.tasks.push({
-            name: this.task,
-            status: "todo",
-          });
+      async submitTask() {
+        if (!this.task.title) return;
+
+          const taskData = {
+            title: this.task.title,
+            description: this.task.description,
+            status: "to-do", // You can set the status as needed
+          };
+
+          if (this.editedTask != null) {
+          // We need to update the task
+            try {
+              await axios.put(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
+              this.tasks[this.editedTask].title = this.task.title;
+              this.tasks[this.editedTask].description = this.task.description;
+              this.editedTask = null;
+            } catch (error) {
+              console.error("Error updating task:", error);
+            }
+          } else {
+            // We need to add a new task
+            try {
+              const response = await axios.post(`${url}/tasks`, taskData)
+              this.tasks.push(response.data);
+            } catch (error) {
+                console.error("Error adding task:", error);
+            }
+          }
+
+          this.task.title = "";
+          this.task.description = "";
         }
-  
-        this.task = "";
-      },
     },
-  };
+  }
   </script>
   
   <style scoped>

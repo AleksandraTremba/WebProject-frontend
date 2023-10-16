@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.5.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {
