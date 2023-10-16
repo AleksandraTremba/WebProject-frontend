@@ -1,13 +1,19 @@
-<script setup>
-</script>
-
 <template>
-  <header>
-  </header>
-
-  <main>
-  </main>
+  <div id="app">
+    <TaskManager></TaskManager>
+  </div>
 </template>
+
+<script>
+import TaskManager from './components/TaskManager.vue'
+
+export default {
+  name: 'App',
+  components: {
+    TaskManager
+  }
+}
+</script>
 
 <style scoped>
 header {
