@@ -35,25 +35,16 @@
         </thead>
         <tbody>
           <tr v-for="(task, index) in tasks" :key="index">
-            <td>
-              <span :class="{ 'line-through': task.status === 'finished' }">
-                {{ task.name }}
-              </span>
+            <td class="text-center">
+                {{ task.title }}
             </td>
             <td>
               {{ task.description }}
             </td>
             <td>
-              <span
-                class="pointer noselect"
-                @click="changeStatus(index)"
-                :class="{
-                  'text-danger': task.status === 'to-do',
-                  'text-success': task.status === 'finished',
-                  'text-warning': task.status === 'in-progress',
-                }"
+              <span class="pointer noselect" @click="changeStatus(index)"
               >
-              {{ task.status }}
+                {{ task.status }}
               </span>
             </td>
             <td class="text-center">
@@ -88,11 +79,9 @@ const url = "http://localhost:8080/api";
           id: 0,
           title: "",
           description: "",
+          status: "TODO"
         },
         editedTask: null,
-        statuses: ["to-do", "in-progress", "finished"],
-  
-        /* Status could be: 'to-do' / 'in-progress' / 'finished' */
         tasks: [],
       };
     },
@@ -115,11 +104,26 @@ const url = "http://localhost:8080/api";
       /**
        * Change status of task by index
        */
-      changeStatus(index) {
-        const currentIndex = this.statuses.indexOf(this.tasks[index].status);
-        const newIndex = (currentIndex + 1) % this.statuses.length;
-        this.tasks[index].status = this.statuses[newIndex];
+      async changeStatus(index) {
+        const currentStatus = this.tasks[index].status;
+        const statusTransitions = {
+          'To-do': 'In-progress',
+          'In-progress': 'Finished',
+          'Finished': 'To-do',
+        };
+        const newStatus = statusTransitions[currentStatus];
+      
+        const taskId = this.tasks[index].id;
+        const taskData = { status: newStatus };
+      
+        try {
+          await axios.put(`${url}/tasks/${taskId}/status`, taskData);
+          this.tasks[index].status = newStatus;
+        } catch (error) {
+          console.error("Error updating task status:", error);
+        }
       },
+
 
       /**
        * Deletes task by index
@@ -144,6 +148,7 @@ const url = "http://localhost:8080/api";
       editTask(index) {
         this.task.title = this.tasks[index].title;
         this.task.description = this.tasks[index].description;
+        this.task.status = this.tasks[index].status
         this.editedTask = index;
       },
   
@@ -156,7 +161,7 @@ const url = "http://localhost:8080/api";
           const taskData = {
             title: this.task.title,
             description: this.task.description,
-            status: "to-do", // You can set the status as needed
+            status: this.task.status, // You can set the status as needed
           };
 
           if (this.editedTask != null) {
@@ -165,6 +170,7 @@ const url = "http://localhost:8080/api";
               await axios.put(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
               this.tasks[this.editedTask].title = this.task.title;
               this.tasks[this.editedTask].description = this.task.description;
+              this.tasks[this.editedTask].status = this.task.status;
               this.editedTask = null;
             } catch (error) {
               console.error("Error updating task:", error);
@@ -181,6 +187,7 @@ const url = "http://localhost:8080/api";
 
           this.task.title = "";
           this.task.description = "";
+          this.task.status = "TODO";
         }
     },
   }

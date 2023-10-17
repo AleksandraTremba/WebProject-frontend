@@ -1,22 +1,18 @@
 <script setup>
 import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
+import TaskManager from './components/TaskManager.vue'
 </script>
 
 <template>
     <header>
     </header>
     <main>
-        <div class="mx-auto p-2" style="width: 280px;">
-            <LoginForm />
-            <br>
-            <RegistrationForm />
-        </div>
+      <TaskManager></TaskManager>
     </main>
 </template>
 
 <script>
-import TaskManager from './components/TaskManager.vue'
 
 export default {
   name: 'App',
