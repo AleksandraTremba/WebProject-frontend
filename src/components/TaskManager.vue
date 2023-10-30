@@ -42,8 +42,7 @@
               {{ task.description }}
             </td>
             <td>
-              <span class="pointer noselect" @click="changeStatus(index)"
-              >
+              <span class="pointer noselect" @click="changeStatus(index)">
                 {{ task.status }}
               </span>
             </td>
@@ -69,14 +68,9 @@ import axios from 'axios';
 const url = "http://localhost:8080/api";
   export default {
     name: "HelloWorld",
-    props: {
-      msg: String,
-    },
-  
     data() {
       return {
         task: {
-          id: 0,
           title: "",
           description: "",
           status: "TODO"
@@ -161,7 +155,7 @@ const url = "http://localhost:8080/api";
           const taskData = {
             title: this.task.title,
             description: this.task.description,
-            status: this.task.status, // You can set the status as needed
+            status: this.task.status // You can set the status as needed
           };
 
           if (this.editedTask != null) {
@@ -180,6 +174,7 @@ const url = "http://localhost:8080/api";
             try {
               const response = await axios.post(`${url}/tasks`, taskData)
               this.tasks.push(response.data);
+              this.task.id = response.data.id;
             } catch (error) {
                 console.error("Error adding task:", error);
             }
