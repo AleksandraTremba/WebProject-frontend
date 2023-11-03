@@ -2,7 +2,7 @@
   <div class="custom-container">
     <p class="timer">{{ formatTime }}</p>
      <div class="progress-bar">
-      <div class="progress" :style="{ width: (timer / 60) * 100 + '%' }"></div>
+      <div class="progress" :style="{ width: (timer/ initialTimer) * 100 + '%' }"></div>
     </div>
     <div class="button-container">
       <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
@@ -15,25 +15,31 @@
 <script setup>
 import { ref, computed } from 'vue';
 
+const initialTimer = ref(60);
 const timer = ref(60);
 const isRunning = ref(false);
 let timerInterval = null;
 
 function startTimer() {
   fetch('http://localhost:8080/api/timer/start', {
-          method: 'POST',
-        }).then(() => {
-          this.isRunning = true;
-        });
+    method: 'POST',
+  }).then(() => {
+    this.isRunning = true;
+  });
 
+  if (!isRunning.value) {
+    if (timer.value === 0) {
+      // Reset the timer to the initial value if it's 00:00
+      timer.value = initialTimer.value;
+    }
 
-  if (!isRunning.value && timer.value > 0) {
     timerInterval = setInterval(() => {
       timer.value--;
       if (timer.value === 0) {
         stopTimer();
       }
     }, 1000);
+
     isRunning.value = true;
   }
 }
@@ -42,7 +48,7 @@ function stopTimer() {
   fetch('http://localhost:8080/api/timer/start', {
         method: 'POST',
       }).then(() => {
-        this.isRunning = true;
+        this.isRunning = f;
       });
 
   if (isRunning.value) {
@@ -63,13 +69,17 @@ const formatTime = computed(() => {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   padding: 20px;
-  margin-top: 20px;
+  width: 400px;
+  height: 500px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 100%; 
 }
 
 .button-container {
@@ -78,16 +88,34 @@ const formatTime = computed(() => {
 
 .timer {
   color: white;
+  font-family: "Comic Sans MS";
+  font-size: 50px;
 }
 
 .btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-color: white;
+  color: white;
+  margin: 0 10px;
+  padding: 10px 20px;
+   font-family: "Comic Sans MS";
+}
+
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-color: white;
+  color: white;
+}
+
+.btn:disabled {
+  background-color: rgba(0, 0, 0, 0.7);
   border-color: white;
   color: white;
 }
 
 .progress-bar {
   height: 10px;
-  width: 100%;
+  width: 250px;
   background-color: black;
   border-radius: 5px;
   margin-top: 10px;
