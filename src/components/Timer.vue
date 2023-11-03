@@ -29,7 +29,6 @@ function startTimer() {
 
   if (!isRunning.value) {
     if (timer.value === 0) {
-      // Reset the timer to the initial value if it's 00:00
       timer.value = initialTimer.value;
     }
 
@@ -89,7 +88,7 @@ const formatTime = computed(() => {
 .timer {
   color: white;
   font-family: "Comic Sans MS";
-  font-size: 50px;
+  font-size: 325%;
 }
 
 .btn {
