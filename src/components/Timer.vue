@@ -69,8 +69,8 @@ const formatTime = computed(() => {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   padding: 20px;
-  width: 400px;
-  height: 500px;
+  width: 300px;
+  height: 400px;
   position: absolute;
   top: 40%;
   left: 50%;
@@ -115,7 +115,7 @@ const formatTime = computed(() => {
 
 .progress-bar {
   height: 10px;
-  width: 250px;
+  width: 85%;
   background-color: black;
   border-radius: 5px;
   margin-top: 10px;
