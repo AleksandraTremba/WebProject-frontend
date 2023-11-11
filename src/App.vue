@@ -10,7 +10,6 @@ import RegistrationForm from './components/RegistrationForm.vue';
         <div class="mx-auto p-2" style="width: 280px;">
             <LoginForm />
             <br>
-            <RegistrationForm />
         </div>
     </main>
 </template>
