@@ -1,6 +1,7 @@
 <script setup>
 import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
+import TimerComponent from './components/Timer.vue';
 </script>
 
 <template>
@@ -8,22 +9,20 @@ import RegistrationForm from './components/RegistrationForm.vue';
     </header>
     <main>
         <div class="mx-auto p-2" style="width: 280px;">
-			<LoginForm />
-			<RegistrationForm />
-			<br>
+            <Timer/>
         </div>
     </main>
 </template>
 
 <script>
-import TaskManager from './components/TaskManager.vue'
+import Timer from './components/Timer.vue'
 
 export default {
   name: 'App',
   components: {
-    TaskManager
-  }
-}
+    Timer, // Register the Timer component here
+  },
+};
 </script>
 
 <style scoped>
