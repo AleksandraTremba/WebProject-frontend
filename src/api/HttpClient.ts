@@ -35,9 +35,28 @@ export class HttpClient implements IHttpClient {
 	}
 
 	post(data: string, path: string): Promise<T> {
-		return new Promise<any>((resolve, reject) => {
+		return new Promise<T>((resolve, reject) => {
 			axios({
 				method: 'post',
+				url: this.getURL() + path,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				data: data
+			})
+				.then((response) => {
+					resolve(response.data);	
+				}, (err) => {
+					console.log(err);
+					reject(err);
+				});
+		});
+	}
+
+	put(data: string, path: string): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			axios({
+				method: 'put',
 				url: this.getURL() + path,
 				headers: {
 					'Content-Type': 'application/json',

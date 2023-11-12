@@ -1,6 +1,7 @@
 import { HttpClient } from '@/api/HttpClient.ts';
 
 interface ICustomer {
+	id: bigint;
 	nickname: string;
 	password: string;
 	newUsername?: string;
@@ -18,6 +19,7 @@ interface ICustomerNetwork extends ICustomer {
 }
 
 export type TCustomer = {
+	id: bigint;
 	nickname: string;
 	password: string;
 };
@@ -32,6 +34,7 @@ export class Customer implements ICustomerNetwork {
 
 	jsonify(): string {
 		return JSON.stringify({
+			id: this.id,
 			username: this.nickname,
 			password: this.password,
 			newUsername: this.newUsername,
@@ -47,15 +50,16 @@ export class Customer implements ICustomerNetwork {
 	login(): Promise<bool> {
 		let data: string = this.jsonify();	
 
+		console.log(data);
+
 		var promise: Promise<bool> = this.http.post(data, 'users/login');
 		return promise;
 	}
 
 	register(): Promise<ICustomer> {
 		let data: string = this.jsonify();
-		console.log(data);
 
-		var promise: Promise<any> = this.http.post(data, 'users/register');
+		var promise: Promise<ICustomer> = this.http.put(data, 'users/register');
 		return promise;
 	}
 
