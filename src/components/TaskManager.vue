@@ -73,7 +73,8 @@ const url = "http://localhost:8080/api";
         task: {
           title: "",
           description: "",
-          status: "TODO"
+          status: "TODO",
+	 	  customerId: 1,	
         },
         editedTask: null,
         tasks: [],
@@ -153,6 +154,7 @@ const url = "http://localhost:8080/api";
         if (!this.task.title) return;
 
           const taskData = {
+			customerId: 1,
             title: this.task.title,
             description: this.task.description,
             status: this.task.status // You can set the status as needed
@@ -172,7 +174,7 @@ const url = "http://localhost:8080/api";
           } else {
             // We need to add a new task
             try {
-              const response = await axios.post(`${url}/tasks`, taskData)
+              const response = await axios.put(`${url}/tasks/create`, taskData)
               this.tasks.push(response.data);
               this.task.id = response.data.id;
             } catch (error) {

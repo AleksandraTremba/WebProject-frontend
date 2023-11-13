@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 	enum Tabs {
 		LOGIN = 'login',
 		TIMER = 'timer',
