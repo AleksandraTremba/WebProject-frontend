@@ -19,6 +19,7 @@ router.addRoute({ path: '/tasks', component: Tasks });
     <main>
 		<SideNavigationBar />
 		<Profile />
+		<TaskManager />
 	</main>
 </template>
 
