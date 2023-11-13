@@ -21,7 +21,7 @@ export class Timer implements ITimerNetwork {
 	constructor() {
 		this.http = new HttpClient();
 		
-		this.customerId = 54;
+		this.customerId = 1;
 		this.initialTime = 60;
 		this.runningTime = this.initialTime;
 		this.isPaused = true;
@@ -38,7 +38,7 @@ export class Timer implements ITimerNetwork {
 		const data = {
 			headers: { },
 			params: {
-				id: this.id,
+				//id: this.id,
 				customerId: this.customerId,
 			}
 		}
