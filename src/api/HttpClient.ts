@@ -15,7 +15,7 @@ export class HttpClient implements IHttpClient {
 	}
 
 	getURL(): string {
-		return 'http://' + this.url + ':' + this.port + "/api/";
+		return "/api/";
 	}
 
 	get(data: string, path: string): Promise<T> {
