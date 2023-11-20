@@ -1,5 +1,5 @@
-FROM node:lts
-RUN npm install -g http-server
+FROM node:lts-alpine
+RUN npm i -g http-server
 
 WORKDIR /app
 COPY package*.json ./
@@ -8,6 +8,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-RUN npm run start
-EXPOSE 8080
+
+EXPOSE 80
 CMD ["http-server", "dist"]

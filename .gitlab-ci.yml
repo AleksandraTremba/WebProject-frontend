@@ -4,11 +4,15 @@ stages:
 
 build-job:
   stage: build
+  only:
+    - dev_server
   script:
     - docker build -t project-okapi-frontend:latest .
 
 deploy-job:
   stage: deploy
+  only:
+    - dev_server
   script:
     - cd /opt/project-okapi/
     - docker-compose down
