@@ -1,5 +1,4 @@
-FROM node:lts-alpine
-RUN npm i -g http-server
+FROM node:lts-alpine as build-stage
 
 WORKDIR /app
 COPY package*.json ./
@@ -9,5 +8,10 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 80
-CMD ["http-server", "dist"]
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf ./*
+
+COPY --from=build-stage /app/dist .
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
