@@ -44,7 +44,7 @@ export class Customer implements ICustomerNetwork {
 	}
 
 	retrieve(): Promise<TCustomer> {
-		var promise: Promise<TCustomer> = this.http.get(null, 'users/' + 'admin');
+		var promise: Promise<TCustomer> = this.http.get(null, '/users/' + 'admin');
 		return promise;
 	}
 
@@ -59,7 +59,7 @@ export class Customer implements ICustomerNetwork {
 
 		console.log(data);
 
-		var promise: Promise<bool> = this.http.post(dataObject, 'users/login');
+		var promise: Promise<bool> = this.http.post(dataObject, '/users/login');
 		return promise;
 	}
 
@@ -74,7 +74,7 @@ export class Customer implements ICustomerNetwork {
 
 		console.log(data);
 
-		var promise: Promise<ICustomer> = this.http.put(dataObject, 'users/register');
+		var promise: Promise<ICustomer> = this.http.put(dataObject, '/users/register');
 		return promise;
 	}
 

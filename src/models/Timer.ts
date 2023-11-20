@@ -43,7 +43,7 @@ export class Timer implements ITimerNetwork {
 			}
 		}
 	
-		var promise: Promise<T> = this.http.post(data, 'timers/create');
+		var promise: Promise<T> = this.http.post(data, '/timers/create');
 		promise.then((result) => {
 				console.log(result);
 				this.id = result.id;
@@ -60,7 +60,7 @@ export class Timer implements ITimerNetwork {
 			},
 		}
 
-		var promise: Promise<T> = this.http.post(data, 'timers/start');
+		var promise: Promise<T> = this.http.post(data, '/timers/start');
 		promise.then((result) => {
 			console.log('Timer is activated');
 			this.isPaused = false;
@@ -77,7 +77,7 @@ export class Timer implements ITimerNetwork {
 			}
 		};
 
-		var promise: Promise<T> = this.http.post(data, 'timers/stop');
+		var promise: Promise<T> = this.http.post(data, '/timers/stop');
 		promise.then((result) => {
 			console.log('Timer is stopped');
 			this.isPaused = true;

@@ -9,13 +9,13 @@ interface IHttpClient {
 }
 
 export class HttpClient implements IHttpClient {
-	constructor(url: string = "localhost", port: number = "8081") {
+	constructor(url: string = "localhost", port: number = "8080") {
 		this.url = url;
 		this.port = port;
 	}
 
 	getURL(): string {
-		return "/api/";
+		return "/api";
 	}
 
 	get(data: string, path: string): Promise<T> {
