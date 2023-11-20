@@ -1,66 +1,58 @@
 <template>
   <div class="custom-container">
-    <p class="timer">{{ formatTime }}</p>
-     <div class="progress-bar">
-      <div class="progress" :style="{ width: (timer/ initialTimer) * 100 + '%' }"></div>
+	<p class="timer">{{ formatTime }}</p>
+	<div class="progress-bar">
+      <div class="progress" :style="{ width: percentageTime + '%' }"></div>
     </div>
-    <div class="button-container">
+	
+	<div class="button-container">
       <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
       <button class="btn btn-primary" @click="stopTimer" :disabled="!isRunning">Stop</button>
     </div>
-    
+		
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
+import { Timer } from '@/models/Timer.ts';
 
-const initialTimer = ref(60);
-const timer = ref(60);
+let timer: Timer = new Timer();
+timer.create();
+
+const percentageTime = ref(100);
+const runningTime = ref(null);
 const isRunning = ref(false);
-let timerInterval = null;
+let interval = null;
 
 function startTimer() {
-  fetch('http://localhost:8080/api/timer/start', {
-    method: 'POST',
-  }).then(() => {
-    this.isRunning = true;
-  });
-
-  if (!isRunning.value) {
-    if (timer.value === 0) {
-      timer.value = initialTimer.value;
-    }
-
-    timerInterval = setInterval(() => {
-      timer.value--;
-      if (timer.value === 0) {
-        stopTimer();
-      }
-    }, 1000);
-
-    isRunning.value = true;
-  }
+	if (timer.isPaused) {
+		timer.start();
+		isRunning.value = true;
+		runningTime.value = timer.runningTime;
+		
+		interval = setInterval(() => {
+			timer.runningTime--;
+			runningTime.value = timer.runningTime;
+			percentageTime.value = timer.timeLeftAsPercentage();
+			if (timer.runningTime === 0)
+				stopTimer();
+		}, 1000);
+	}
 }
 
 function stopTimer() {
-  fetch('http://localhost:8080/api/timer/start', {
-        method: 'POST',
-      }).then(() => {
-        this.isRunning = f;
-      });
-
-  if (isRunning.value) {
-    clearInterval(timerInterval);
-    isRunning.value = false;
-  }
+	timer.pause();
+	isRunning.value = false;
+	clearInterval(interval);
 }
 
 const formatTime = computed(() => {
-  const minutes = Math.floor(timer.value / 60);
-  const seconds = timer.value % 60;
+  const minutes = Math.floor(runningTime.value / 60);
+  const seconds = runningTime.value % 60;
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 });
+
 </script>
 
 <style>
@@ -85,7 +77,7 @@ const formatTime = computed(() => {
   margin-top: 20px;
 }
 
-.timer {
+.timer-time {
   color: white;
   font-family: "Comic Sans MS";
   font-size: 325%;

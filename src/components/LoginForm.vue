@@ -1,40 +1,42 @@
-<script setup>
+<script setup lang="ts">
 
 import { ref } from 'vue';
+import { Customer } from '@/models/Customer.ts';
 
-const url = "http://localhost:8080/api/users/login";
-const user = {
-    username: '',
-    password: ''
-};
+let customer: Customer = new Customer();
 
-let notLogged = ref(null);
+let isLogged: bool = ref(null);
 
 function confirmLogin() {
-    const userBody = JSON.stringify(user);
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: userBody,
-    })
-        .then(response => response.json())
-        .then(data => notLogged.value = data);
+	var promise: Promise<bool> = customer.login();
+	promise.then((result) => {
+		isLogged.value = result;
+	}, (err) => {
+		console.log(err);
+	});
 }
+
+function retrieveData() {
+	var promise: Promise<TCustomer> = customer.retrieve();
+	promise.then((result) => {
+		console.log(result);
+	}, (err) => {
+		console.log(err);
+	});
+}
+
 </script>
 
 <template>
     <div class="login-form">
-        <input type="text" class="form-control mb-2" placeholder="Nickname" v-model="user.username"/>
-        <input type="password" class="form-control mb-2" placeholder="Password" v-model="user.password"/>
-        <button type="button" class="btn btn-primary w-100" :class="{'btn-danger': notLogged == false}" @click="confirmLogin">Login</button>
+        <input type="text" class="form-control mb-2" placeholder="Nickname" v-model="customer.nickname" />
+        <input type="password" class="form-control mb-2" placeholder="Password" v-model="customer.password"/>
+        <button type="button" class="btn btn-primary w-100" :class="{'btn-danger': isLogged == false}" @click="confirmLogin">Login</button>
         <div class="text-center">
-            <p v-if="notLogged == true">Success!</p>
-            <p v-if="notLogged == false" class="invalid ">Invalid credentials!</p>
+            <p v-if="isLogged == true">Success!</p>
+            <p v-if="isLogged == false" class="invalid ">Invalid credentials!</p>
         </div>
+		<button type="button" class="btn btn-primary w-100" @click="retrieveData">Get Data</button>
     </div>
 </template>
 
