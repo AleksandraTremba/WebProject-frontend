@@ -1,4 +1,4 @@
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine as build
 
 WORKDIR /app
 COPY package*.json ./
@@ -13,5 +13,6 @@ WORKDIR /usr/share/nginx/html
 
 RUN rm -rf ./*
 
-COPY --from=build-stage /app/dist .
+COPY --from=build /app/dist .
+EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
