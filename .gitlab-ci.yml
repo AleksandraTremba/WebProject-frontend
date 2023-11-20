@@ -15,5 +15,4 @@ deploy-job:
     - dev_server
   script:
     - cd /opt/project-okapi/
-    - docker-compose down
-    - docker-compose up -d
+    - docker compose up -d
