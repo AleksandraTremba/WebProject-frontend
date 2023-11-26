@@ -1,6 +1,7 @@
 <script setup>
 import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
+import HomePage from './components/HomePage.vue';
 </script>
 
 <template>
@@ -8,9 +9,7 @@ import RegistrationForm from './components/RegistrationForm.vue';
     </header>
     <main>
         <div class="mx-auto p-2" style="width: 280px;">
-            <LoginForm />
-            <br>
-            <RegistrationForm />
+            <HomePage />
         </div>
     </main>
 </template>
