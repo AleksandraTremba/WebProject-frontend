@@ -2,6 +2,8 @@
 import LoginForm from './components/LoginForm.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import HomePage from './components/HomePage.vue';
+import TopTimer from './components/TopTimer.vue';
+import Sidebar from './components/Sidebar.vue';
 </script>
 
 <template>
@@ -9,7 +11,7 @@ import HomePage from './components/HomePage.vue';
     </header>
     <main>
         <div class="mx-auto p-2" style="width: 280px;">
-            <HomePage />
+            <TopTimer />
         </div>
     </main>
 </template>

@@ -21,8 +21,8 @@
         </nav>
 
         <!-- Page content -->
-        <main role="main" class="col-md-2 ml-sm-auto col-lg-10 px-4 ">
-          <div class="content">
+        <main role="main" class="col-md-2">
+          <div class="d-flex align-items-center">
                <div class="timer-container">
                   <p class="timer">Timer</p>
                 </div>
