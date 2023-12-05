@@ -15,6 +15,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="">Tasks</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Group</a>
+                        </li>
                     </ul>
                 </div>
             </nav>

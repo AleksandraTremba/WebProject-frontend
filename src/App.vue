@@ -4,6 +4,7 @@ import RegistrationForm from './components/RegistrationForm.vue';
 import HomePage from './components/HomePage.vue';
 import TopTimer from './components/TopTimer.vue';
 import Sidebar from './components/Sidebar.vue';
+import GroupPage from './components/GroupPage.vue';
 </script>
 
 <template>
@@ -11,7 +12,7 @@ import Sidebar from './components/Sidebar.vue';
     </header>
     <main>
         <div class="mx-auto p-2" style="width: 280px;">
-            <TopTimer />
+            <GroupPage />
         </div>
     </main>
 </template>
