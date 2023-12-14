@@ -5,6 +5,7 @@ import HomePage from './components/HomePage.vue';
 import TopTimer from './components/TopTimer.vue';
 import Sidebar from './components/Sidebar.vue';
 import GroupPage from './components/GroupPage.vue';
+import GroupSearchPage from './components/GroupSearchPage.vue';
 import RecordsPage from './components/RecordsPage.vue';
 import TaskPage from './components/TaskPage.vue';
 </script>
@@ -14,7 +15,7 @@ import TaskPage from './components/TaskPage.vue';
     </header>
     <main>
         <div class="" style="">
-            <RegistrationForm />
+            <GroupSearchPage />
         </div>
     </main>
 </template>
