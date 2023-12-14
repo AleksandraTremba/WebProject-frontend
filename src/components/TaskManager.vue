@@ -163,7 +163,7 @@ const url = "http://localhost:8080/api";
           if (this.editedTask != null) {
           // We need to update the task
             try {
-              await axios.put(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
+              await axios.get(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
               this.tasks[this.editedTask].title = this.task.title;
               this.tasks[this.editedTask].description = this.task.description;
               this.tasks[this.editedTask].status = this.task.status;

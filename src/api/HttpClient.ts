@@ -15,7 +15,7 @@ export class HttpClient implements IHttpClient {
 	}
 
 	getURL(): string {
-		return 'http://' + this.url + ':' + this.port + "/api/";
+		return "/api";
 	}
 
 	get(data: string, path: string): Promise<T> {
@@ -50,16 +50,13 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	put(data: string, path: string): Promise<T> {
+	put(data: object, path: string): Promise<T> {
+		const config = {
+			method: 'put',
+			url: this.getURL() + path,
+		};
 		return new Promise<T>((resolve, reject) => {
-			axios({
-				method: 'put',
-				url: this.getURL() + path,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				data: data
-			})
+			axios({...config, ...data})
 				.then((response) => {
 					resolve(response.data);	
 				}, (err) => {
