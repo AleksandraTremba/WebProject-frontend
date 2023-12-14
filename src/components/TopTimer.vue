@@ -1,7 +1,7 @@
 <template>
-    <div class="fixed-top">
+    <div class="">
         <div class="top-timer-container">
-            <div class="d-flex justify-content-center">
+            <div class="top-timer-content d-flex justify-content-center">
                   <button class="top-btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
                     <div class="top-timer-progress d-flex align-items-center">
                       <div class="col-4 d-flex justify-content-center">
@@ -29,8 +29,12 @@
     margin-top: 0px;
     height: 50px;
     padding: 5px;
-    min-width: 100%;
+    width: 100%;
     }
+
+.top-timer-content {
+  margin-left: 150px;
+}
 
 .top-timer {
   color: white;

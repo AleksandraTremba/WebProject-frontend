@@ -1,27 +1,5 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item text-center">
-                            <h1 class="okapi_menu"> Okapi </h1>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Tasks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Group</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
-    <div class="task-page-container" style="max-width: 600px">
+    <div class="col-md-7 task-page-container align-self-start" style="max-width: 600px">
       <!-- Heading -->
       <h2 class="text-center mt-5">Task Manager</h2>
   
@@ -165,4 +143,8 @@
   .line-through {
     text-decoration: line-through;
   }
+  .task-page-container {
+    width: 1000px;
+  }
+
   </style>

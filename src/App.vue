@@ -5,14 +5,16 @@ import HomePage from './components/HomePage.vue';
 import TopTimer from './components/TopTimer.vue';
 import Sidebar from './components/Sidebar.vue';
 import GroupPage from './components/GroupPage.vue';
+import RecordsPage from './components/RecordsPage.vue';
+import TaskPage from './components/TaskPage.vue';
 </script>
 
 <template>
     <header>
     </header>
     <main>
-        <div class="mx-auto p-2" style="width: 280px;">
-            <GroupPage />
+        <div class="" style="">
+            <RegistrationForm />
         </div>
     </main>
 </template>

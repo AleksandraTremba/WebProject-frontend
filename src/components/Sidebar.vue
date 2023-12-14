@@ -18,6 +18,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="">Group</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Records</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -39,6 +42,7 @@
   bottom: 0;
   padding: 20px;
   background-color: #FAF8F8;
+  overflow-y: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
