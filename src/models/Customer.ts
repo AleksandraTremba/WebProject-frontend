@@ -4,7 +4,7 @@ interface ICustomer {
 	id: bigint;
 	nickname: string;
 	password: string;
-	newUsername?: string;
+	newNickname?: string;
 	newPassword?: string;
 }
 
@@ -13,7 +13,8 @@ interface ICustomerNetwork extends ICustomer {
 
 	login: () => void;
 	register: () => void;
-	update: () => void;
+	updateNickname: () => void;
+	updatePassword: () => void;
 	delete: () => void;
 
 }
@@ -25,30 +26,38 @@ export type TCustomer = {
 };
 
 export class Customer implements ICustomerNetwork {
-	isLogged: bool = false;
+	id!: bigint;
+	isLogged: boolean = false;
+	http: HttpClient;
+
+	nickname!: string;
+	password!: string;
+	newNickname?: string | undefined;
+	newPassword?: string | undefined;
 
 	constructor() {
-		this.id = 0;
-		this.isLogged = false;
 		this.http = new HttpClient();
 	}
 
-	jsonify(): string {
+	private jsonify(): string {
 		return JSON.stringify({
 			id: this.id,
 			username: this.nickname,
 			password: this.password,
-			newUsername: this.newUsername,
+			newUsername: this.newNickname,
 			newPassword: this.newPassword,
 		});
 	}
 
-	retrieve(): Promise<TCustomer> {
-		var promise: Promise<TCustomer> = this.http.get(null, 'users/' + 'admin');
-		return promise;
+	private loadData(data: ICustomer) {
+		this.id = data.id;
+		this.nickname = data.nickname;
+		this.password = data.password;
+		this.newNickname = data.newNickname;
+		this.newPassword = data.newPassword;
 	}
 
-	login(): Promise<bool> {
+	login(): void {
 		let data: string = this.jsonify();
 		const dataObject = {
 			headers: {
@@ -57,13 +66,17 @@ export class Customer implements ICustomerNetwork {
 			data,
 		};
 
-		console.log(data);
-
-		var promise: Promise<bool> = this.http.post(dataObject, 'users/login');
-		return promise;
+		var promise: Promise<ICustomer> = this.http.post(dataObject, 'users/login');
+		promise.then((result) => {
+			console.log(result);
+			this.loadData(result);
+			this.isLogged = true;
+		}, (err) => {
+			console.log(err);
+		});
 	}
 
-	register(): Promise<ICustomer> {
+	register(): void {
 		let data: string = this.jsonify();
 		const dataObject = {
 			headers: {
@@ -71,28 +84,36 @@ export class Customer implements ICustomerNetwork {
 			},
 			data,
 		};
-
-		console.log(data);
 
 		var promise: Promise<ICustomer> = this.http.put(dataObject, 'users/register');
-		return promise;
+		promise.then((result) => {
+			console.log(result);
+			this.login();
+		}, (err) => {
+			console.log(err);
+		});
 	}
 
-	updateUsername(): Promise<bool> {
+	updateNickname(): void {
 		let data: string = this.jsonify();
 		console.log(data);
 
 		this.http.post(data, 'users/update/username');
 	}
 
-	updatePassword(): Promise<bool> {
+	updatePassword(): void {
 		let data: string = this.jsonify();
-		console.log(data);
+		const dataObject = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data,
+		};
 
-		this.http.post(data, 'users/update/password');
+		this.http.post(dataObject, 'users/update/password');
 	}
 
-	delete(): Promise<TCustomer> {
+	delete(): void {
 		let data: string = this.jsonify();
 		console.log(data);
 
@@ -100,3 +121,7 @@ export class Customer implements ICustomerNetwork {
 	}
 }
 
+function retrieve(nickname: string): Promise<TCustomer> {
+	var promise: Promise<TCustomer> = HttpClient.get(null, 'users/' + nickname);
+	return promise;
+}
