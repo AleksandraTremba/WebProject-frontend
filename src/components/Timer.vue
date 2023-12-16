@@ -48,8 +48,8 @@ function stopTimer() {
 }
 
 const formatTime = computed(() => {
-  const minutes = Math.floor(runningTime.value / 60);
-  const seconds = runningTime.value % 60;
+  const minutes = Math.floor(timer.runningTime / 60);
+  const seconds = timer.runningTime % 60;
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 });
 

@@ -2,14 +2,18 @@ import axios from 'axios';
 
 interface IHttpClient {
 	url: string;
-	port: number;
+	port: string;
 	
-	get: () => void;
-	post: () => bool;
+	get: (data: string, path: string) => Promise<T>;
+	post: (data: object, path: string) => Promise<T>;
+	put: (data: object, path: string) => Promise<T>;
 }
 
 export class HttpClient implements IHttpClient {
-	constructor(url: string = "localhost", port: number = "8080") {
+	url: string;
+	port: string;
+
+	constructor(url: string = "localhost", port: string = "8080") {
 		this.url = url;
 		this.port = port;
 	}
@@ -18,7 +22,7 @@ export class HttpClient implements IHttpClient {
 		return "/api";
 	}
 
-	get(data: string, path: string): Promise<T> {
+	async get(data: string, path: string): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			axios({
 				method: 'get',
@@ -34,7 +38,7 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	post(data: object, path: string): Promise<T> {
+	async post(data: object, path: string): Promise<T> {
 		const config = {
 			method: 'post',
 			url: this.getURL() + path,
@@ -50,7 +54,7 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	put(data: object, path: string): Promise<T> {
+	async put(data: object, path: string): Promise<T> {
 		const config = {
 			method: 'put',
 			url: this.getURL() + path,

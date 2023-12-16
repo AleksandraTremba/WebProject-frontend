@@ -3,25 +3,31 @@ import { HttpClient } from '@/api/HttpClient.ts';
 interface ITimer {
 	id: bigint;
 	customerId: bigint;
-	initialTime: int;
-	runningTime: int;
-	isPaused: bool;
+	initialTime: number;
+	runningTime: number;
+	isPaused: boolean;
 }
 
 interface ITimerNetwork extends ITimer {
 	http: HttpClient;
 
 	create: () => void;
-	start: () => Promise<T>;
-	pause: () => Promise<T>;
-	end: () => Promise<T>;
+	start: () => void;
+	pause: () => void;
 }
 
 export class Timer implements ITimerNetwork {
+	http: HttpClient;
+
+	id!: bigint;
+	customerId!: bigint;
+	initialTime: number;
+	runningTime: number;
+	isPaused: boolean;
+
 	constructor() {
 		this.http = new HttpClient();
 		
-		this.customerId = 1;
 		this.initialTime = 60;
 		this.runningTime = this.initialTime;
 		this.isPaused = true;
@@ -38,7 +44,6 @@ export class Timer implements ITimerNetwork {
 		const data = {
 			headers: { },
 			params: {
-				//id: this.id,
 				customerId: this.customerId,
 			}
 		}
@@ -52,7 +57,7 @@ export class Timer implements ITimerNetwork {
 			});
 	}
 
-	start(): Promise<bool> {
+	start(): void {
 		const data = {
 			headers: { },
 			params: {
@@ -69,7 +74,7 @@ export class Timer implements ITimerNetwork {
 		});
 	}
 
-	pause(): Promise<bool> {
+	pause(): void {
 		const data = {
 			headers: { },
 			params: {
@@ -84,9 +89,6 @@ export class Timer implements ITimerNetwork {
 		}, (err) => {
 			console.log(err);
 		});
-	}
-
-	end(): Promise<bool> {
 	}
 
 	timeLeftAsPercentage(): number {

@@ -3,19 +3,11 @@ import { ref } from 'vue';
 import { Customer } from '@/models/Customer.ts';
 
 let customer: Customer = new Customer();
-let isTaken: bool = ref(null);
+let isTaken = ref(null);
 
-function confirmRegistration() {
-	var promise: Promise<bool> = customer.register();
-	promise.then((result) => {
-		console.log(result);
-		if (result != '')
-			isTaken.value = false;
-		else
-			isTaken.value = true;
-	}, (err) => {
-		console.log(err);
-	});
+function confirmRegistration(): void {
+	customer.register();
+	isTaken.value = !customer.isLogged;
 }
 
 </script>
@@ -26,7 +18,7 @@ function confirmRegistration() {
         <input type="password" class="form-control mb-2" placeholder="Password" v-model="customer.password"/>
         <button type="button" class="btn btn-primary w-100" :class="{'btn-warning': isTaken}" @click="confirmRegistration">Register</button>
         <div class="text-center">
-            <p v-if="isTaken == false">Success!</p>
+            <p v-if="!isTaken">Success!</p>
             <p v-if="isTaken" class="invalid ">This username is already taken!</p>
         </div>
     </div>
