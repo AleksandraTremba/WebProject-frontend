@@ -1,15 +1,14 @@
 <template>
   <div class="custom-container">
-	<p class="timer">{{ formatTime }}</p>
-	<div class="progress-bar">
+	  <p class="timer">{{ formatTime }}</p>
+	  <div class="progress-bar">
       <div class="progress" :style="{ width: percentageTime + '%' }"></div>
     </div>
 	
-	<div class="button-container">
+	  <div class="button-container">
       <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
       <button class="btn btn-primary" @click="stopTimer" :disabled="!isRunning">Stop</button>
-    </div>
-		
+    </div>		
   </div>
 </template>
 
@@ -23,7 +22,7 @@ timer.create();
 const percentageTime = ref(100);
 const runningTime = ref(null);
 const isRunning = ref(false);
-let interval = null;
+let interval: any = null;
 
 function startTimer() {
 	if (timer.isPaused) {
@@ -60,17 +59,25 @@ const formatTime = computed(() => {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 20px;
   padding: 20px;
-  width: 300px;
-  height: 400px;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-top: 20px;
+  height: 500px;
+  min-width: 300px;
+  margin-right: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  max-width: 100%; 
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.timer-name {
+  color: white;
+  font-size: 1.5rem; 
+margin-bottom: 100px;
+}
+
+.timer {
+  color: white;
 }
 
 .button-container {
@@ -79,7 +86,6 @@ const formatTime = computed(() => {
 
 .timer-time {
   color: white;
-  font-family: "Comic Sans MS";
   font-size: 325%;
 }
 
@@ -89,7 +95,6 @@ const formatTime = computed(() => {
   color: white;
   margin: 0 10px;
   padding: 10px 20px;
-   font-family: "Comic Sans MS";
 }
 
 .btn:hover {
@@ -117,5 +122,15 @@ const formatTime = computed(() => {
   background-color: white; 
   border-radius: 5px;
   transition: width 1s linear;
+}
+
+.mainpage-nav-item {
+  margin-bottom: 10px;
+  margin-right: auto;
+  color: white;
+}
+
+.timer-button {
+  margin-left: 135px;
 }
 </style>

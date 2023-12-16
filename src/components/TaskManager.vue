@@ -195,10 +195,13 @@ let taskHandler: TaskHandler = new TaskHandler();
 	</template>
 
 <style scoped>
-	.pointer {
-		cursor: pointer;
-	}
-	.line-through {
-		text-decoration: line-through;
-	}
+  .pointer {
+    cursor: pointer;
+  }
+  .line-through {
+    text-decoration: line-through;
+  }
+  .task-page-container {
+    width: 1000px;
+  }
 </style>
