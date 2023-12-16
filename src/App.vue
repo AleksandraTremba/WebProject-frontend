@@ -21,14 +21,6 @@ import TaskPage from './components/TaskPage.vue';
 </template>
 
 <script>
-import TaskManager from './components/TaskManager.vue'
-
-export default {
-  name: 'App',
-  components: {
-    TaskManager
-  }
-}
 </script>
 
 <style scoped>

@@ -1,63 +1,57 @@
 <template>
   <div class="custom-container">
-    <h2 class="timer-name">Timer</h2>
-            <p class="timer">00:00</p>
-            <div class="progress-bar">
-            <div class="progress" :style="{ width: (timer/ initialTimer) * 100 + '%' }"></div>
-            </div>
-            <div class="button-container">
-              <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
-              <button class="btn btn-primary" @click="stopTimer" :disabled="!isRunning">Stop</button>
-            </div>
+	  <p class="timer">{{ formatTime }}</p>
+	  <div class="progress-bar">
+      <div class="progress" :style="{ width: percentageTime + '%' }"></div>
+    </div>
+	
+	  <div class="button-container">
+      <button class="btn btn-primary" @click="startTimer" :disabled="isRunning">Start</button>
+      <button class="btn btn-primary" @click="stopTimer" :disabled="!isRunning">Stop</button>
+    </div>		
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      isRunning: false,
-      timer: '00:00',
-    };
-  },
-  methods: {
-    startTimer() {
-      fetch('http://localhost:8080/api/timer/start', {
-        method: 'POST',
-      }).then(() => {
-        this.isRunning = true;
-      });
-    },
-    stopTimer() {
-      fetch('http://localhost:8080/api/timer/stop', {
-        method: 'POST',
-      }).then(() => {
-        this.isRunning = false;
-      });
-    },
-    resetTimer() {
-      fetch('http://localhost:8080/api/timer/reset', {
-        method: 'POST',
-      }).then(() => {
-        this.isRunning = false;
-        this.timer = '00:00';
-      });
-    },
-    updateTimer() {
-      fetch('http://localhost:8080/api/timer', {
-        method: 'GET',
-      })
-          .then((response) => response.text())
-          .then((data) => {
-            this.timer = data;
-          });
-    },
-  },
-  mounted() {
-    // Periodically update the timer value
-    setInterval(this.updateTimer, 1000);
-  },
-};
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { Timer } from '@/models/Timer.ts';
+
+let timer: Timer = new Timer();
+timer.create();
+
+const percentageTime = ref(100);
+const runningTime = ref(null);
+const isRunning = ref(false);
+let interval: any = null;
+
+function startTimer() {
+	if (timer.isPaused) {
+		timer.start();
+		isRunning.value = true;
+		runningTime.value = timer.runningTime;
+		
+		interval = setInterval(() => {
+			timer.runningTime--;
+			runningTime.value = timer.runningTime;
+			percentageTime.value = timer.timeLeftAsPercentage();
+			if (timer.runningTime === 0)
+				stopTimer();
+		}, 1000);
+	}
+}
+
+function stopTimer() {
+	timer.pause();
+	isRunning.value = false;
+	clearInterval(interval);
+}
+
+const formatTime = computed(() => {
+  const minutes = Math.floor(timer.runningTime / 60);
+  const seconds = timer.runningTime % 60;
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+});
+
 </script>
 
 <style>
@@ -90,7 +84,7 @@ margin-bottom: 100px;
   margin-top: 20px;
 }
 
-.timer {
+.timer-time {
   color: white;
   font-size: 325%;
 }

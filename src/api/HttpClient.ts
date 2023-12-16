@@ -1,0 +1,72 @@
+import axios from 'axios';
+
+interface IHttpClient {
+	url: string;
+	port: string;
+	
+	get: (data: string, path: string) => Promise<T>;
+	post: (data: object, path: string) => Promise<T>;
+	put: (data: object, path: string) => Promise<T>;
+}
+
+export class HttpClient implements IHttpClient {
+	url: string;
+	port: string;
+
+	constructor(url: string = "localhost", port: string = "8080") {
+		this.url = url;
+		this.port = port;
+	}
+
+	getURL(): string {
+		return "/api";
+	}
+
+	async get(data: string, path: string): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			axios({
+				method: 'get',
+				url: this.getURL() + path,
+				data: data
+			})
+				.then((response) => {
+					resolve(response.data);
+				}, (err) => {
+					console.log(err);
+					reject(err);
+				});
+		});
+	}
+
+	async post(data: object, path: string): Promise<T> {
+		const config = {
+			method: 'post',
+			url: this.getURL() + path,
+		};
+		return new Promise<T>((resolve, reject) => {
+			axios({...config, ...data})
+				.then((response) => {
+					resolve(response.data);	
+				}, (err) => {
+					console.log(err);
+					reject(err);
+				});
+		});
+	}
+
+	async put(data: object, path: string): Promise<T> {
+		const config = {
+			method: 'put',
+			url: this.getURL() + path,
+		};
+		return new Promise<T>((resolve, reject) => {
+			axios({...config, ...data})
+				.then((response) => {
+					resolve(response.data);	
+				}, (err) => {
+					console.log(err);
+					reject(err);
+				});
+		});
+	}
+}
