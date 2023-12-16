@@ -25,8 +25,8 @@ export class Timer implements ITimerNetwork {
 	runningTime: number;
 	isPaused: boolean;
 
-	constructor() {
-		this.http = new HttpClient();
+	constructor(http?: HttpClient) {
+		this.http = http ?? new HttpClient();
 		
 		this.initialTime = 60;
 		this.runningTime = this.initialTime;

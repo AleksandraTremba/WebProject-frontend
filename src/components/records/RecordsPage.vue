@@ -1,13 +1,11 @@
 <script setup>
-  import Sidebar from '../components/Sidebar.vue';
-   import TopTimer from '../components/TopTimer.vue';
+  import TopTimer from '../timer/TopTimer.vue';
 </script>
 
 <template>
 
   <div>
   <div class="container-one">
-        <Sidebar />
         <TopTimer />
         </div>
         <div class="container-two">

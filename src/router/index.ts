@@ -1,17 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import Login from '@/components/LoginForm.vue';
-import Register from '@/components/RegistrationForm.vue';
-import Timer from '@/components/Timer.vue';
-import Tasks from '@/components/TaskManager.vue';
-import Profile from '@/components/Profile.vue';
-import Sidebar from '@/components/SideNavigationBar.vue';
+import Login from '@/components/access/LoginForm.vue';
+import Register from '@/components/access/RegistrationForm.vue';
+import Timer from '@/components/timer/Timer.vue';
+import Tasks from '@/components/tasks/TaskPage.vue';
+import Profile from '@/components/profile/Profile.vue';
+import Home from '@/components/Home.vue';
+import Groups from '@/components/groups/GroupPage.vue';
+import Records from '@/components/records/RecordsPage.vue';
 
 const routes = [
 	{
 		path: "/",
-		name: "Default",
-		component: Sidebar,
+		name: "Home",
+		component: Home,
 	},
 	{
 		path: "/login",
@@ -38,6 +40,16 @@ const routes = [
 		name: "Profile",
 		component: Profile,
 	},
+	{
+		path: "/groups",
+		name: "Groups",
+		component: Groups,
+	},
+	{
+		path: "/records",
+		name: "Records",
+		component: Records,
+	}
 ];
 
 const router = createRouter({
