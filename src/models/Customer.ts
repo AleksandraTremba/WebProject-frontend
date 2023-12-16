@@ -49,18 +49,12 @@ export class Customer implements ICustomerNetwork {
 		});
 	}
 
-<<<<<<< HEAD
-	retrieve(): Promise<TCustomer> {
-		var promise: Promise<TCustomer> = this.http.get(null, '/users/' + 'admin');
-		return promise;
-=======
 	private loadData(data: ICustomer) {
 		this.id = data.id;
 		this.nickname = data.nickname;
 		this.password = data.password;
 		this.newNickname = data.newNickname;
 		this.newPassword = data.newPassword;
->>>>>>> dev-ts-migration
 	}
 
 	login(): void {
@@ -72,12 +66,6 @@ export class Customer implements ICustomerNetwork {
 			data,
 		};
 
-<<<<<<< HEAD
-		console.log(data);
-
-		var promise: Promise<bool> = this.http.post(dataObject, '/users/login');
-		return promise;
-=======
 		var promise: Promise<ICustomer> = this.http.post(dataObject, 'users/login');
 		promise.then((result) => {
 			console.log(result);
@@ -86,7 +74,6 @@ export class Customer implements ICustomerNetwork {
 		}, (err) => {
 			console.log(err);
 		});
->>>>>>> dev-ts-migration
 	}
 
 	register(): void {
@@ -98,12 +85,6 @@ export class Customer implements ICustomerNetwork {
 			data,
 		};
 
-<<<<<<< HEAD
-		console.log(data);
-
-		var promise: Promise<ICustomer> = this.http.put(dataObject, '/users/register');
-		return promise;
-=======
 		var promise: Promise<ICustomer> = this.http.put(dataObject, 'users/register');
 		promise.then((result) => {
 			console.log(result);
@@ -111,7 +92,6 @@ export class Customer implements ICustomerNetwork {
 		}, (err) => {
 			console.log(err);
 		});
->>>>>>> dev-ts-migration
 	}
 
 	updateNickname(): void {
