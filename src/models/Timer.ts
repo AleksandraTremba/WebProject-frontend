@@ -11,9 +11,9 @@ interface ITimer {
 interface ITimerNetwork extends ITimer {
 	http: HttpClient;
 
-	create: () => void;
 	start: () => void;
 	pause: () => void;
+	reset: () => void;
 }
 
 export class Timer implements ITimerNetwork {
@@ -25,8 +25,8 @@ export class Timer implements ITimerNetwork {
 	runningTime: number;
 	isPaused: boolean;
 
-	constructor() {
-		this.http = new HttpClient();
+	constructor(http?: HttpClient) {
+		this.http = http ?? new HttpClient();
 		
 		this.initialTime = 60;
 		this.runningTime = this.initialTime;
@@ -40,32 +40,24 @@ export class Timer implements ITimerNetwork {
 		});
 	}
 
-	create(): void {
-		const data = {
-			headers: { },
-			params: {
-				customerId: this.customerId,
-			}
-		}
-	
-		var promise: Promise<T> = this.http.post(data, '/timers/create');
-		promise.then((result) => {
-				console.log(result);
-				this.id = result.id;
-			}, (err) => {
-				console.log(err);
-			});
+	jsonifyStart(): string {
+		return JSON.stringify({
+			id: this.id,
+			runningTime: this.initialTime,			
+		});
 	}
 
 	start(): void {
-		const data = {
-			headers: { },
-			params: {
-				id: this.id,
+		let data: string = this.jsonifyStart();
+		const dataObj = {
+			headers: { 
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + sessionStorage.getItem('user-token'),
 			},
+			data,
 		}
 
-		var promise: Promise<T> = this.http.post(data, '/timers/start');
+		var promise: Promise<T> = this.http.post(dataObj, '/timers/start');
 		promise.then((result) => {
 			console.log('Timer is activated');
 			this.isPaused = false;
@@ -89,6 +81,25 @@ export class Timer implements ITimerNetwork {
 		}, (err) => {
 			console.log(err);
 		});
+	}
+
+	reset(): void {
+		let data: string = this.jsonify();
+		const dataObj = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			data,
+		}
+
+		var promise: Promise<T> = this.http.post(dataObj, '/timers/reset');
+		promise.then((result) => {
+			console.log(result);
+			this.runningTime = result.runningTime;
+		}, (err) => {
+			alert("Something went wrong with the server!");
+			console.log(err);
+		})
 	}
 
 	timeLeftAsPercentage(): number {

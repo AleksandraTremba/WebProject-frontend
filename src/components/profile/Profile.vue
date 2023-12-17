@@ -2,11 +2,12 @@
 
 import { ref } from 'vue';
 import { Customer } from '@/models/Customer.ts';
+import type { ICustomer } from '@/models/Customer.ts';
 
 let customer: Customer = new Customer();
 
 function retrieveData() {
-	var promise: Promise<TCustomer> = customer.retrieve();
+	var promise: Promise<ICustomer> = customer.retrieve();
 	promise.then((result) => {
 		console.log(result);
 	}, (err) => {

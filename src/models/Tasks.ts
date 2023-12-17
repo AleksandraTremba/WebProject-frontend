@@ -45,11 +45,9 @@ export class TaskHandler implements ITaskHandler {
 	http: HttpClient;
 	tasks: Map<bigint, Task>;
 
-	constructor() {
-		this.http = new HttpClient();
+	constructor(http?: HttpClient) {
+		this.http = http ?? new HttpClient();
 		this.tasks = new Map<bigint, Task>();
-
-		this.load(1n);
 	}
 
 	jsonify(task: Task): string {

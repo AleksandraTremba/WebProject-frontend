@@ -9,7 +9,7 @@ interface IHttpClient {
 	put: (data: object, path: string) => Promise<T>;
 }
 
-export class HttpClient implements IHttpClient {
+class HttpClient implements IHttpClient {
 	url: string;
 	port: string;
 
@@ -19,10 +19,14 @@ export class HttpClient implements IHttpClient {
 	}
 
 	getURL(): string {
-		return "/api";
+		return "http://" + this.url + ':' + this.port + "/api";
 	}
 
-	async get(data: string, path: string): Promise<T> {
+	injectSecurityHeader(token: string): void {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+	}
+
+	get(data: string, path: string): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			axios({
 				method: 'get',
@@ -38,7 +42,7 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	async post(data: object, path: string): Promise<T> {
+	post(data: object, path: string): Promise<T> {
 		const config = {
 			method: 'post',
 			url: this.getURL() + path,
@@ -54,7 +58,7 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 
-	async put(data: object, path: string): Promise<T> {
+	put(data: object, path: string): Promise<T> {
 		const config = {
 			method: 'put',
 			url: this.getURL() + path,
@@ -70,3 +74,5 @@ export class HttpClient implements IHttpClient {
 		});
 	}
 }
+
+export { HttpClient };
