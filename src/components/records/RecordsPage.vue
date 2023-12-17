@@ -1,13 +1,10 @@
 <script setup>
-  import TopTimer from '../timer/TopTimer.vue';
 </script>
 
 <template>
 
   <div>
   <div class="container-one">
-        <TopTimer />
-        </div>
         <div class="container-two">
         <!-- Page content -->
           <div class="records-content" style="max-width: 800px">
@@ -32,6 +29,7 @@
             </div>
           </div>
           </div>
+        </div>
   </div>
 
 </template>

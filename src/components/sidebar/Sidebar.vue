@@ -32,7 +32,7 @@
                             <p class="my-0 py-2 px-3 fs-5"><i class="bi bi-bar-chart-fill pe-2"></i>Records</p>
                         </li></a>
                         <a v-if="!isSignedIn" class="nav-btn" @click="$emit('changeTab', 4)" href="#"><li>
-                            <p class="my-0 py-2 px-3 fs-5"><i class="bi bi-box-arrow-in-left pe-"></i>Login</p>
+                            <p class="my-0 py-2 px-3 fs-5"><i class="bi bi-box-arrow-in-left pe-2"></i>Login</p>
                         </li></a>
                         <a v-if="isSignedIn" class="nav-btn" @click="$emit('changeTab', 4)" href="#"><li>
                             <p class="my-0 py-2 px-3 fs-5"><i class="bi bi-person-badge pe-2"></i>Profile</p>

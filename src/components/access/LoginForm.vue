@@ -17,12 +17,9 @@ function confirmLogin() {
 	var promise: Promise<ICustomer> = customer.login();
 
     promise.then((result) => {
-        console.log(result);
-        console.log(customer);
         customer.id = result.id;
         customer.timerId = result.timerId;
         customer.token = result.token;
-        console.log(customer);
 
         emit('loginSuccess', customer);
     }, (err) => {

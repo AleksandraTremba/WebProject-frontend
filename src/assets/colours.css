@@ -9,10 +9,16 @@
 	--darkest-colour: #BEC5B2;
 
 	--red-colour: #FBE3DA;
-	--blue-colour: #E9F0E9;
+	--blue-colour: #7FBBB3;
 	--yellow-colour: #FAEDCD;
 	--light-green-colour: #F0F1D2;
-	--dark-green-colour: #FAEDCD;
+	--dark-green-colour: #5D6B66;
+
+	--dimmed-blue-colour: #3F5865;
+	--dimmed-green-colour: #48584E;
+
+	--darker-green-colour: #8DA101;
+	--darker-red-colour: #E66868;
 
 	--almost-black-colour: ##232A2E;
 }

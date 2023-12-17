@@ -14,15 +14,13 @@ interface ICustomerNetwork extends ICustomer {
 	http: HttpClient;
 	storage: LocalStorageManager;
 
-	login: () => void;
-	login: (copy: ICustomer) => void;
+	login: () => Promise<ICustomer>;
+	login2: (copy: Customer) => void;
 
-	register: () => void;
+	register: () => Promise<ICustomer>;
 	updateNickname: () => void;
 	updatePassword: () => void;
 	delete: () => void;
-
-	copyData: (copy: Object) => void;
 }
 
 class Customer implements ICustomerNetwork {
@@ -53,12 +51,13 @@ class Customer implements ICustomerNetwork {
 	}
 
 	private loadData(data: Customer) {
+		this.id = data.id;
 		this.nickname = data.nickname;
 		this.timerId = data.timerId;
 		this.token = data.token;
 	}
 
-	login(): void {
+	login(): Promise<ICustomer> {
 		let data: string = this.jsonify();
 		const dataObject = {
 			headers: {
@@ -72,12 +71,14 @@ class Customer implements ICustomerNetwork {
 	}
 
 	login2(copy: Customer): void {
+		console.log(copy.id);
+		console.log(this.id);
 		this.loadData(copy);
+		console.log(this.id);
 		this.storage.write('user-token', this.token);
-		this.http.injectSecurityHeader(this.token);
 	}
 
-	register(): void {
+	register(): Promise<ICustomer> {
 		let data: string = this.jsonify();
 		const dataObject = {
 			headers: {
@@ -118,6 +119,7 @@ class Customer implements ICustomerNetwork {
 
 	cloneToType(): ICustomer {
 		let tCustomer: ICustomer;
+		tCustomer.id = this.id;
 		tCustomer.nickname = this.nickname;
 		tCustomer.timerId = this.timerId;
 		tCustomer.token = this.token;
@@ -126,7 +128,7 @@ class Customer implements ICustomerNetwork {
 	}
 }
 
-function retrieve(nickname: string): Promise<TCustomer> {
+function retrieve(nickname: string): Promise<ICustomer> {
 	var promise: Promise<ICustomer> = HttpClient.get(null, 'users/' + nickname);
 	return promise;
 }

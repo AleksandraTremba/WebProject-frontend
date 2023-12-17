@@ -14,7 +14,6 @@
 
   // Underlying structures
   import { Customer } from '@/models/Customer';
-  import { Timer } from '@/models/Timer';
   import { TaskHandler } from '@/models/Tasks';
   import { HttpClient } from '@/api/HttpClient';
   import { LocalStorageManager } from '@/api/LocalStorage';
@@ -28,7 +27,6 @@
   let storage: LocalStorageManager = new LocalStorageManager();
 
   let customer: Customer = new Customer(http, storage);
-  let timer: Timer = new Timer(http);
   let taskHandler: TaskHandler = new TaskHandler(http);
 
   const tabId = ref(0);
@@ -41,8 +39,9 @@
 
   function copyCustomerData(copy: Customer) {
     try {
-      this.customer.login2(copy);
-      this.changeTab(0);
+      customer.login2(copy);
+      http.injectSecurityHeader(customer.token);
+      changeTab(0);
       isSignedIn.value = true;
     } catch (e) {
       console.log(e);
@@ -63,8 +62,8 @@
               <Sidebar @change-tab="(n: number) => changeTab(n)" :isSignedIn="isSignedIn" />
             </div>
             <div class="col">
+              <TimerContainer v-if="isSignedIn" :http="http" :timerId="customer.timerId" :customerId="customer.id"/>
               <div v-if="tabId === 0">
-                
               </div>
               <div v-if="tabId === 1 && isSignedIn">
                 <Tasks />
@@ -76,8 +75,8 @@
                 <Records />
               </div>
               <div v-if="tabId === 4 && !isSignedIn" class="m-5">
-                <Login v-if="!registration" v-bind:http="http" v-bind:storage="storage" @login-success="(data: Customer) => copyCustomerData(data)" @register="() => activateRegistation(true)"/>
-                <Register v-if="registration" v-bind:http="http" v-bind:storage="storage" @registration-success="() => activateRegistation(false)"/>
+                <Login v-if="!registration" :http="http" v-bind:storage="storage" @login-success="(data: Customer) => copyCustomerData(data)" @register="() => activateRegistation(true)"/>
+                <Register v-if="registration" :http="http" v-bind:storage="storage" @registration-success="() => activateRegistation(false)"/>
               </div>
               <div v-if="tabId === 4 && isSignedIn">
                 <!--- MUST REMAKE TO USE LOCAL DATA --->
