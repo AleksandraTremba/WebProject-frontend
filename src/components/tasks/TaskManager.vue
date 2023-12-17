@@ -1,133 +1,71 @@
 <script lang="ts" setup>
-
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { HttpClient } from '@/api/HttpClient';
 import { TaskHandler, Task } from '@/models/Tasks';
 
-let taskShell: Task = new Task();
-let taskHandler: TaskHandler = new TaskHandler();
+const props = defineProps({
+	http: HttpClient,
+	customerId: Number,
+})
 
-	// export default {
-	//   name: "HelloWorld",
-	//   data() {
-	//     return {
-	//       task: {
-	//         title: "",
-	//         description: "",
-	//         status: "TODO",
-	//      customerId: 1,  
-	//       },
-	//       editedTask: null,
-	//       tasks: [],
-	//     };
-	//   },
+let taskShell: Task = new Task(0, props.customerId);
+let taskHandler: TaskHandler = reactive(new TaskHandler(props.http));
 
-	//   created() {
-	//     this.loadTasks();
-	//   },
-	
-	//   methods: {
-			
-	//     async loadTasks() {
-	//       try {
-	//         const response = await axios.get(`${url}/tasks`);
-	//         this.tasks = response.data;
-	//       } catch (error) {
-	//         console.error("Error fetching tasks:", error)
-	//       }
-	//     },
-	
-	//     /**
-	//      * Change status of task by index
-	//      */
-	//     async changeStatus(index) {
-	//       const currentStatus = this.tasks[index].status;
-	//       const statusTransitions = {
-	//         'To-do': 'In-progress',
-	//         'In-progress': 'Finished',
-	//         'Finished': 'To-do',
-	//       };
-	//       const newStatus = statusTransitions[currentStatus];
-			
-	//       const taskId = this.tasks[index].id;
-	//       const taskData = { status: newStatus };
-			
-	//       try {
-	//         await axios.put(`${url}/tasks/${taskId}/status`, taskData);
-	//         this.tasks[index].status = newStatus;
-	//       } catch (error) {
-	//         console.error("Error updating task status:", error);
-	//       }
-	//     },
+loadData();
 
+function loadData() {
+	let promise = taskHandler.load(props.customerId);
+	promise.then((result) => {
+		console.log(result);
+		result.forEach((el) => {
+			taskHandler.tasks.set(el.id, el);
+		});
+		console.log(taskHandler.tasks);
+	}, (err) => {
+		console.log(err);
+	})
+}
 
-	//     /**
-	//      * Deletes task by index
-	//      */
-	//     async deleteTask(index) {
-	//       if (this.tasks[index] && this.tasks[index].id) {
-	//         const taskId = this.tasks[index].id;  
-	//         try {
-	//           await axios.delete(`${url}/tasks/${taskId}`)
-	//           this.tasks.splice(index, 1);
-	//         } catch (error) {
-	//           console.error("Error deleting task:", error);
-	//         } 
-	//       } else {
-	//         console.error("Invalid task or missing ID.");
-	//       }
-	//     },
-	
-	//     /**
-	//      * Edit task
-	//      */
-	//     editTask(index) {
-	//       this.task.title = this.tasks[index].title;
-	//       this.task.description = this.tasks[index].description;
-	//       this.task.status = this.tasks[index].status
-	//       this.editedTask = index;
-	//     },
-	
-	//     /**
-	//      * Add / Update task
-	//      */
-	//     async submitTask() {
-	//       if (!this.task.title) return;
+function createTask() {
+	let promise = taskHandler.create(taskShell);
+	promise.then((result) => {
+		console.log(result);
+		taskHandler.addTask(taskShell);
+	}, (err) => {
+		console.log(err);
+	})
+}
 
-	//         const taskData = {
-	//    customerId: 1,
-	//           title: this.task.title,
-	//           description: this.task.description,
-	//           status: this.task.status // You can set the status as needed
-	//         };
+function editTask(id: BigInt) {
+	let task: Task | undefined = taskHandler.tasks.get(id);
 
-	//         if (this.editedTask != null) {
-	//         // We need to update the task
-	//           try {
-	//             await axios.get(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
-	//             this.tasks[this.editedTask].title = this.task.title;
-	//             this.tasks[this.editedTask].description = this.task.description;
-	//             this.tasks[this.editedTask].status = this.task.status;
-	//             this.editedTask = null;
-	//           } catch (error) {
-	//             console.error("Error updating task:", error);
-	//           }
-	//         } else {
-	//           // We need to add a new task
-	//           try {
-	//             const response = await axios.put(`${url}/tasks/create`, taskData)
-	//             this.tasks.push(response.data);
-	//             this.task.id = response.data.id;
-	//           } catch (error) {
-	//               console.error("Error adding task:", error);
-	//           }
-	//         }
+	if (task !== undefined) {
+		task.customerId = props.customerId;
+		let promise = taskHandler.edit(task);
+		promise.then((result) => {
+			console.log(result);
+			taskHandler.editTask(task);
+		}, (err) => {
+			console.log(err);
+		})
+	}
+}
 
-	//         this.task.title = "";
-	//         this.task.description = "";
-	//         this.task.status = "TODO";
-	//       }
-	//   },
-	// }
+function deleteTask(id: BigInt) {
+	let task: Task | undefined = taskHandler.tasks.get(id);
+
+	if (task !== undefined) {
+		task.customerId = props.customerId;
+		let promise = taskHandler.delete(task);
+		promise.then((result) => {
+			console.log(result);
+			taskHandler.deleteTask(id);
+		}, (err) => {
+			console.log(err);
+		})
+	}
+}
+
 </script>
 
 <template>
@@ -149,7 +87,7 @@ let taskHandler: TaskHandler = new TaskHandler();
 					placeholder="Enter task description"
 					class="w-100 form-control"
 				/>
-				<button class="btn btn-warning rounded-0" @click="taskHandler.create(taskShell)">
+				<button class="btn btn-warning rounded-0" @click="createTask">
 					Add
 				</button>
 			</div>
@@ -179,12 +117,12 @@ let taskHandler: TaskHandler = new TaskHandler();
 							</span>
 						</td>
 						<td class="text-center">
-							<button class="btn btn-warning rounded-0" @click="taskHandler.delete(id)">
+							<button class="btn btn-warning rounded-0" @click="deleteTask(id)">
 								Delete
 							</button>
 						</td>
 						<td class="text-center">
-							<button class="btn btn-warning rounded-0" @click="taskHandler.edit(id)">
+							<button class="btn btn-warning rounded-0" @click="editTask(id)">
 								Edit
 							</button>
 						</td>

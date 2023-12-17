@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/access/LoginForm.vue';
 import Register from '@/components/access/RegistrationForm.vue';
 import Timer from '@/components/timer/Timer.vue';
-import Tasks from '@/components/tasks/TaskPage.vue';
+import Tasks from '@/components/tasks/TaskManager.vue';
 import Profile from '@/components/profile/Profile.vue';
 import Home from '@/components/Home.vue';
 import Groups from '@/components/groups/GroupPage.vue';

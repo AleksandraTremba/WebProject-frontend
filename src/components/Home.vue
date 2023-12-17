@@ -6,7 +6,7 @@
   import Login from '@/components/access/LoginForm.vue';
   import Register from '@/components/access/RegistrationForm.vue';
   import TimerContainer from '@/components/timer/Timer.vue';
-  import Tasks from '@/components/tasks/TaskPage.vue';
+  import Tasks from '@/components/tasks/TaskManager.vue';
   import Profile from '@/components/profile/Profile.vue';
   import Home from '@/components/Home.vue';
   import Groups from '@/components/groups/GroupPage.vue';
@@ -27,7 +27,6 @@
   let storage: LocalStorageManager = new LocalStorageManager();
 
   let customer: Customer = new Customer(http, storage);
-  let taskHandler: TaskHandler = new TaskHandler(http);
 
   const tabId = ref(0);
   
@@ -66,7 +65,7 @@
               <div v-if="tabId === 0">
               </div>
               <div v-if="tabId === 1 && isSignedIn">
-                <Tasks />
+                <Tasks :http="http" :customerId="customer.id" />
               </div>
               <div v-if="tabId === 2 && isSignedIn">
                 <Groups />

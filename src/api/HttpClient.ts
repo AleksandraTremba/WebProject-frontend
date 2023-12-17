@@ -73,6 +73,22 @@ class HttpClient implements IHttpClient {
 				});
 		});
 	}
+
+	delete(data: object, path: string): Promise<T> {
+		const config = {
+			method: 'delete',
+			url: this.getURL() + path,
+		};
+		return new Promise<T>((resolve, reject) => {
+			axios({...config, ...data})
+				.then((response) => {
+					resolve(response.data);	
+				}, (err) => {
+					console.log(err);
+					reject(err);
+				});
+		});
+	}
 }
 
 export { HttpClient };

@@ -34,10 +34,10 @@ interface ITaskHandler {
 	http: HttpClient;
 	tasks: Map<bigint, Task>;
 
-	create: (task: Task) => boolean;
-	load: (customerId: bigint) => void;
-	edit: (task: Task) => boolean;
-	delete: (id: bigint) => boolean;
+	create: (task: Task) => Promise<T>;
+	load: (customerId: bigint) => Promise<T>;
+	edit: (task: Task) => Promise<T>;
+	delete: (task: Task) => Promise<T>;
 }
 
 
@@ -60,8 +60,17 @@ export class TaskHandler implements ITaskHandler {
 		});
 	}
 
-	create(task: Task): boolean {
-		const data: string = this.jsonify(task);
+	jsonifyCreation(task: Task): string {
+		return JSON.stringify({
+			customerId: task.customerId.toString(),
+			title: task.title,
+			description: task.description,
+			status: task.status,
+		});
+	}
+
+	create(task: Task): Promise<T> {
+		const data: string = this.jsonifyCreation(task);
 		const dataObject = {
 			headers: {
 				'Content-Type': 'application/json',
@@ -69,105 +78,46 @@ export class TaskHandler implements ITaskHandler {
 			data,
 		};
 
-		console.log(dataObject);
-
 		var isDone: boolean = false;
 
-		var promise: Promise<T> = this.http.put(dataObject, 'tasks/create');
-		promise.then((result) => {
-			console.log(result);
-			this.tasks.set(task.id, task);
-			isDone = true;
-		}, (err) => {
-			console.log(err);
-		});
-
-		return isDone;
+		var promise: Promise<T> = this.http.put(dataObject, '/tasks/create');
+		return promise;
 	}
 
-	load(customerId: bigint): void {
-		const data = {
-			headers: { },
-			params: {
-				customerId: customerId,
-			}
-		}
-		var isLoaded: boolean = false;
-
-		var promise: Promise<T> = this.http.get(null, "tasks");
-		promise.then((result) => {
-			console.log(result);
-			result.forEach((el) => {
-				this.tasks.set(el.id, el);
-			})
-			console.log(this.tasks);
-		}, (err) => {
-			console.log(err);
-		});
+	addTask(task: Task): void {
+		this.tasks.set(task.id, task);
 	}
 
-	edit(task: Task): boolean {
-		const data = {
+	load(customerId: bigint): Promise<T> {
+		var promise: Promise<T> = this.http.get(null, "/tasks/?customerId=" + customerId);
+		return promise;
+	}
+
+	edit(task: Task): Promise<T> {
+		let data = this.jsonify(task);
+		const dataObj = {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			params: {
-				id: task.id,
-				customerId: task.customerId,
-				title: task.title,
-				description: task.description,
-				status: task.status,
-			}
+			data,
 		};
 		
 		var isDone: boolean = false;
 
-		var promise: Promise<T> = this.http.put(data, 'tasks/create');
-		promise.then((result) => {
-			console.log(result);
-			
-			if (this.tasks.has(task.id)) {
-				this.tasks.set(task.id, task);
-				isDone = true;
-			}
-		}, (err) => {
-			console.log(err);
-		});
-
-		return isDone;
+		var promise: Promise<T> = this.http.post(dataObj, '/tasks/update');
+		return promise;
 	}
 
-	delete(id: bigint): boolean {
-		var isDone: boolean = false;
-		const task: Task | undefined = this.tasks.get(id);
-		
-		if (task !== undefined) {
-			const data = {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				params: {
-					id: task.id,
-					customerId: task.customerId,
-					title: task.title,
-					description: task.description,
-					status: task.status,
-				}
-			};
+	editTask(task: Task): void {
+		this.tasks.set(task.id, task);
+	}
 
-			var promise: Promise<T> = this.http.put(data, 'tasks/create');
-			promise.then((result) => {
-				console.log(result);
-				
-				if (this.tasks.has(task.id)) {
-					this.tasks.delete(task.id);
-					isDone = true;
-				}
-			}, (err) => {
-				console.log(err);
-			});
-		}
+	delete(task: Task): Promise<T> {
+		var promise: Promise<T> = this.http.delete(null, '/tasks/' + task.id);
+		return promise;
+	}
 
-		return isDone;
+	deleteTask(id: bigint) {
+		this.tasks.delete(id);
 	}
 }
