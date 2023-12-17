@@ -42,6 +42,8 @@
       http.injectSecurityHeader(customer.token);
       changeTab(0);
       isSignedIn.value = true;
+      console.log(copy);
+      console.log(customer);
     } catch (e) {
       console.log(e);
     }
@@ -68,10 +70,10 @@
                 <Tasks :http="http" :customerId="customer.id" />
               </div>
               <div v-if="tabId === 2 && isSignedIn">
-                <Groups />
+                <Groups :http="http" :customer="customer" :groupId="customer.groupId" />
               </div>
               <div v-if="tabId === 3">
-                <Records />
+                <Records :http="http" />
               </div>
               <div v-if="tabId === 4 && !isSignedIn" class="m-5">
                 <Login v-if="!registration" :http="http" v-bind:storage="storage" @login-success="(data: Customer) => copyCustomerData(data)" @register="() => activateRegistation(true)"/>
