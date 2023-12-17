@@ -1,29 +1,34 @@
-# front
+# Project Okapi
 
-This template should help get you started developing with Vue 3 in Vite.
+## Purpose
+The goal of the project is to make an easy-to-use platform where students can
+track their time spent studying and completed tasks.
 
-## Recommended IDE Setup
+### Authors
+* Maksim Usmanov (mausma)
+* Aleksandra Tremba (altrem)
+* Sten Smirnov (stsmir)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### Technologies Used
 
-## Customize configuration
+* Vue
+* TypeScript
+* Bootstrap
+* Axios
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Installation
 
-## Project Setup
+Frontend is created with a help of **Vue**, **TypeScript**, **Bootstrap**, **Axios** and search engines.
 
-```sh
-pnpm install
-```
+### Prerequisites
+Okapi Frontend uses the following dependencies:
 
-### Compile and Hot-Reload for Development
+* NodeJS
+* pnpm / npm
 
-```sh
-pnpm dev
-```
+### Installation
+In order to build the project, from the root folder run:
 
-### Compile and Minify for Production
+`pnpm run build`
 
-```sh
-pnpm build
-```
+`pnpm run preview`
