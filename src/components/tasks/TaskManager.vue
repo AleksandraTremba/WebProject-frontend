@@ -131,77 +131,49 @@ let taskHandler: TaskHandler = new TaskHandler();
 </script>
 
 <template>
-		<div class="container" style="max-width: 600px">
-			<!-- Heading -->
-			<h2 class="text-center mt-5">Task Manager</h2>
-	
-			<!-- Input -->
-			<div class="d-flex mt-5">
-				<input
-					type="text"
-					v-model="taskShell.title"
-					placeholder="Enter task title"
-					class="w-100 form-control"
-				/>
-				<input
-					type="text"
-					v-model="taskShell.description"
-					placeholder="Enter task description"
-					class="w-100 form-control"
-				/>
-				<button class="btn btn-warning rounded-0" @click="taskHandler.create(taskShell)">
-					Add
-				</button>
-			</div>
-	
-			<!-- Task table -->
-			<table class="table table-bordered mt-5">
-				<thead>
-					<tr>
-						<th scope="col">Task</th>
-						<th scope="col">Description</th>
-						<th scope="col" style="width: 120px">Status</th>
-						<th scope="col" class="text-center">#</th>
-						<th scope="col" class="text-center">#</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="[id, task] in taskHandler.tasks" :key="id">
-						<td class="text-center">
-								{{ task.title }}
-						</td>
-						<td>
-							{{ task.description }}
-						</td>
-						<td>
-							<span class="pointer noselect">
-								{{ task.status }}
-							</span>
-						</td>
-						<td class="text-center">
-							<button class="btn btn-warning rounded-0" @click="taskHandler.delete(id)">
-								Delete
-							</button>
-						</td>
-						<td class="text-center">
-							<button class="btn btn-warning rounded-0" @click="taskHandler.edit(id)">
-								Edit
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</template>
+<div class="container d-flex flex-row justify-content-center">
+    <div class="d-flex flex-column">
+        <h2 class="text-center mt-5">Tasks</h2>
+        <div class="card border-0 rounded-4 p-3 shadow task-card" style="max-width: 400px">
+            <div class="task-items row">
+                <div class="col">
+                    <h3 class="task-name fs-4"> Task name </h3>
+                    <p class="task-description"> Task description </p>
+                </div>
+                <div class="col">
+                    <div class="container d-flex flex-column align-items-center">
+                        <div class="card border-0 rounded-5 p-2 task-status-card">
+                            <p class="task-status"> To Do </p>
+                        </div>
+                        <div class="button-container mt-2 d-flex">
+                            <button type="button" class="btn btn-primary" style="margin-right: 10px;">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
 
-<style scoped>
-  .pointer {
-    cursor: pointer;
-  }
-  .line-through {
-    text-decoration: line-through;
-  }
-  .task-page-container {
-    width: 1000px;
-  }
+<style src="@/assets/colours.css"></style>
+<style setup>
+.task-card {
+	 background-color: var(--coffee-colour) !important;
+}
+.task-status-card {
+    background-color: white !important;
+    border-radius: 8px;
+}
+.bi {
+	color: black;
+}
+</style>
+<style>
+
 </style>
