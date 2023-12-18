@@ -26,7 +26,7 @@ promise.then((result) => {
   console.log(err);
 })
 </script>
-
+  
 <template>
 
   <div>
