@@ -7,6 +7,7 @@ const props = defineProps({
   http: HttpClient,
   timerId: Number,
   customerId: Number,
+  isHome: Boolean,
 });
 
 let timer: Timer = reactive(new Timer(props.http));
@@ -77,7 +78,7 @@ const seconds = computed(() => {
 
 <template>
   <div class="container text-center">
-    <div class="timer d-flex flex-column p-5 shadow">
+    <div class="timer d-flex flex-column p-4" :class="{'timer': props.isHome, 'timer-sm': !props.isHome}">
       <div class="fs-1" v-if="!wantEditTime" @dblclick="wantEditTime = true">
         <p>{{ minutes }}:{{ seconds }}</p>
       </div>
@@ -107,8 +108,31 @@ const seconds = computed(() => {
   }
 
   .timer {
-      background-color: var(--coffee-colour) !important;
-      border-radius: 8px;
+    max-width: 512px;
+    background-color: var(--coffee-colour) !important;
+    border-radius: 8px;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+    transition: box-shadow 1s;
+  }
+
+  .timer-sm {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    max-width: 256px;
+
+    box-shadow: var(--bs-box-shadow-sm);
+    transition: box-shadow 1s;
+  }
+
+  .timer:hover {
+    box-shadow: var(--bs-box-shadow) !important;
+  }
+
+  .timer-sm:hover { 
+    box-shadow: var(--bs-box-shadow) !important;
   }
 
   .btn-primary {

@@ -33,8 +33,12 @@
   // Booleans to manipulate webapp state
   const registration = ref(false);
   const isSignedIn = ref(false);
+  const isHome = ref(true);
 
-  function changeTab(id: number) { tabId.value = id; }
+  function changeTab(id: number) { 
+    tabId.value = id; 
+    isHome.value = id === 0;
+  }
 
   function copyCustomerData(copy: Customer) {
     try {
@@ -52,6 +56,29 @@
   function activateRegistation(value: boolean) {
     registration.value = value;
   }
+
+  function updateUsername(value: string) {
+    customer.newData = value;
+    let promise: Promise<ICustomer> = customer.updateNickname();
+
+    promise.then((result) => {
+      console.log(result);
+      customer.nickname = result.username;
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  function updatePassword(value: string) {
+    customer.newData = value;
+    let promise: Promise<ICustomer> = customer.updatePassword();
+
+    promise.then((result) => {
+      console.log(result);
+    }, (err) => {
+      console.log(err);
+    });
+  }
 </script>
 
 <template>
@@ -63,7 +90,8 @@
               <Sidebar @change-tab="(n: number) => changeTab(n)" :isSignedIn="isSignedIn" />
             </div>
             <div class="col">
-              <TimerContainer v-if="isSignedIn" :http="http" :timerId="customer.timerId" :customerId="customer.id"/>
+              <h1 class="text-center mt-4" v-if="isHome">Welcome back, {{ customer.nickname }}</h1>
+              <TimerContainer class="ms-5 mt-5" v-if="isSignedIn" :http="http" :timerId="customer.timerId" :customerId="customer.id" :isHome="isHome" />
               <div v-if="tabId === 0">
               </div>
               <div v-if="tabId === 1 && isSignedIn">
@@ -81,7 +109,7 @@
               </div>
               <div v-if="tabId === 4 && isSignedIn">
                 <!--- MUST REMAKE TO USE LOCAL DATA --->
-                <Profile />
+                <Profile :http="http" :customer="customer" @update-username="(data: string) => updateUsername(data)" @update-password="(data: string) => updatePassword(data)" />
               </div>
             </div>
         </div>

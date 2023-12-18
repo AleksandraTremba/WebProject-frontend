@@ -19,8 +19,8 @@ interface ICustomerNetwork extends ICustomer {
 	login2: (copy: Customer) => void;
 
 	register: () => Promise<ICustomer>;
-	updateNickname: () => void;
-	updatePassword: () => void;
+	updateNickname: () => Promise<ICustomer>;
+	updatePassword: () => Promise<ICustomer>;
 	delete: () => void;
 }
 
@@ -38,7 +38,7 @@ class Customer implements ICustomerNetwork {
 	token?: string | undefined;
 
 	publicDomain: string = '/public/customers';
-	privateDomain: string = 'customers';
+	privateDomain: string = '/customers';
 
 	constructor(http?: HttpClient, storage?: LocalStorageManager) {
 		this.http = http ?? new HttpClient();
@@ -98,14 +98,15 @@ class Customer implements ICustomerNetwork {
 		return promise;
 	}
 
-	updateNickname(): void {
+	updateNickname(): Promise<ICustomer> {
 		let data: string = this.jsonify();
 		console.log(data);
 
-		this.http.post(data, this.privateDomain + '/update/username');
+		var promise: Promise<ICustomer> = this.http.post(data, this.privateDomain + '/update/username');
+		return promise;
 	}
 
-	updatePassword(): void {
+	updatePassword(): Promise<ICustomer> {
 		let data: string = this.jsonify();
 		const dataObject = {
 			headers: {
@@ -114,7 +115,8 @@ class Customer implements ICustomerNetwork {
 			data,
 		};
 
-		this.http.post(dataObject, this.privateDomain + 'users/update/password');
+		var promise: Promise<ICustomer> = this.http.post(dataObject, this.privateDomain + '/update/password');
+		return promise;
 	}
 
 	delete(): void {
