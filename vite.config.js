@@ -16,14 +16,14 @@ export default defineConfig({
   server: {
 	http: true,
 	port: 8081,
-//	proxy: {
-//	  '/api': {
-//		target: 'http://localhost:8090',
-//		changeOrigin: true,
-//		secure: false,
-//		ws: true,
-////		rewrite: (path) => path.replace(/^\/api/, ''),
-//	  }
-//	}
+// 	proxy: {
+// 	  '/api': {
+// 		target: 'http://localhost:8080',
+// 		changeOrigin: true,
+// 		secure: false,
+// 		ws: true,
+// //		rewrite: (path) => path.replace(/^\/api/, ''),
+// 	  }
+// 	}
   }
 })

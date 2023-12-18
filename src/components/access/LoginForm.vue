@@ -18,6 +18,7 @@ function confirmLogin() {
 
     promise.then((result) => {
         customer.id = result.id;
+        customer.groupId = result.groupId;
         customer.timerId = result.timerId;
         customer.token = result.token;
 

@@ -1,31 +1,39 @@
+<script lang="ts" setup>
+import { ref, reactive } from 'vue';
+import { HttpClient } from '@/api/HttpClient';
+
+const props = defineProps({
+  http: HttpClient,
+  groupId: Number,
+});
+
+const members: Array<string> = reactive(new Array());
+const url: string = "/groups";
+
+let promise: Promise<T> = props.http.get(null, url + "/?groupId=" + props.groupId);
+promise.then((result) => {
+  console.log(result);
+}, (err) => {
+  console.log(err);
+})
+
+</script>
+
 <template>
  <div class="col-md-3 user-container align-self-start">
         <h2 class="users-name">Users</h2>
         <div class="user-list text-center">
           <ul class="nav flex-column">
             <li class="users-nav-item text-center">
-              <p class="one-user"> First user </p>
+              <p class="one-user"> You </p>
             </li>
-            <li class="users-nav-item">
-              <p class="one-user"> Second user </p>
-            </li>
-            <li class="users-nav-item">
-              <p class="one-user"> Third user </p>
-            </li>
-            <li class="users-nav-item">
-              <p class="one-user"> Fourth user </p>
-            </li>
-            <li class="users-nav-item">
-              <p class="one-user"> Fifth user </p>
+            <li class="users-nav-item" v-for="member in members">
+              <p class="one-user"> {{ member }} </p>
             </li>
           </ul>
         </div>
       </div>
 </template>
-
-<script>
-
-</script>
 
 <style>
 .user-container {

@@ -1,162 +1,125 @@
 <script lang="ts" setup>
-
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { HttpClient } from '@/api/HttpClient';
 import { TaskHandler, Task } from '@/models/Tasks';
 
-let taskShell: Task = new Task();
-let taskHandler: TaskHandler = new TaskHandler();
+const props = defineProps({
+	http: HttpClient,
+	customerId: Number,
+})
 
-	// export default {
-	//   name: "HelloWorld",
-	//   data() {
-	//     return {
-	//       task: {
-	//         title: "",
-	//         description: "",
-	//         status: "TODO",
-	//      customerId: 1,  
-	//       },
-	//       editedTask: null,
-	//       tasks: [],
-	//     };
-	//   },
+let taskShell: Task = new Task(0, props.customerId);
+let taskHandler: TaskHandler = reactive(new TaskHandler(props.http));
 
-	//   created() {
-	//     this.loadTasks();
-	//   },
-	
-	//   methods: {
-			
-	//     async loadTasks() {
-	//       try {
-	//         const response = await axios.get(`${url}/tasks`);
-	//         this.tasks = response.data;
-	//       } catch (error) {
-	//         console.error("Error fetching tasks:", error)
-	//       }
-	//     },
-	
-	//     /**
-	//      * Change status of task by index
-	//      */
-	//     async changeStatus(index) {
-	//       const currentStatus = this.tasks[index].status;
-	//       const statusTransitions = {
-	//         'To-do': 'In-progress',
-	//         'In-progress': 'Finished',
-	//         'Finished': 'To-do',
-	//       };
-	//       const newStatus = statusTransitions[currentStatus];
-			
-	//       const taskId = this.tasks[index].id;
-	//       const taskData = { status: newStatus };
-			
-	//       try {
-	//         await axios.put(`${url}/tasks/${taskId}/status`, taskData);
-	//         this.tasks[index].status = newStatus;
-	//       } catch (error) {
-	//         console.error("Error updating task status:", error);
-	//       }
-	//     },
+let mouseOver: boolean = false;
 
+loadData();
 
-	//     /**
-	//      * Deletes task by index
-	//      */
-	//     async deleteTask(index) {
-	//       if (this.tasks[index] && this.tasks[index].id) {
-	//         const taskId = this.tasks[index].id;  
-	//         try {
-	//           await axios.delete(`${url}/tasks/${taskId}`)
-	//           this.tasks.splice(index, 1);
-	//         } catch (error) {
-	//           console.error("Error deleting task:", error);
-	//         } 
-	//       } else {
-	//         console.error("Invalid task or missing ID.");
-	//       }
-	//     },
-	
-	//     /**
-	//      * Edit task
-	//      */
-	//     editTask(index) {
-	//       this.task.title = this.tasks[index].title;
-	//       this.task.description = this.tasks[index].description;
-	//       this.task.status = this.tasks[index].status
-	//       this.editedTask = index;
-	//     },
-	
-	//     /**
-	//      * Add / Update task
-	//      */
-	//     async submitTask() {
-	//       if (!this.task.title) return;
+function loadData() {
+	let promise = taskHandler.load(props.customerId);
+	promise.then((result) => {
+		console.log(result);
+		result.forEach((el) => {
+			taskHandler.tasks.set(el.id, el);
+		});
+		console.log(taskHandler.tasks);
+	}, (err) => {
+		console.log(err);
+	})
+}
 
-	//         const taskData = {
-	//    customerId: 1,
-	//           title: this.task.title,
-	//           description: this.task.description,
-	//           status: this.task.status // You can set the status as needed
-	//         };
+function createTask() {
+	let promise = taskHandler.create(taskShell);
+	promise.then((result) => {
+		console.log(result);
+		taskHandler.addTask(taskShell);
+	}, (err) => {
+		console.log(err);
+	})
+}
 
-	//         if (this.editedTask != null) {
-	//         // We need to update the task
-	//           try {
-	//             await axios.get(`${url}/tasks/${this.tasks[this.editedTask].id}`, taskData)
-	//             this.tasks[this.editedTask].title = this.task.title;
-	//             this.tasks[this.editedTask].description = this.task.description;
-	//             this.tasks[this.editedTask].status = this.task.status;
-	//             this.editedTask = null;
-	//           } catch (error) {
-	//             console.error("Error updating task:", error);
-	//           }
-	//         } else {
-	//           // We need to add a new task
-	//           try {
-	//             const response = await axios.put(`${url}/tasks/create`, taskData)
-	//             this.tasks.push(response.data);
-	//             this.task.id = response.data.id;
-	//           } catch (error) {
-	//               console.error("Error adding task:", error);
-	//           }
-	//         }
+function editTask(id: BigInt) {
+	let task: Task | undefined = taskHandler.tasks.get(id);
 
-	//         this.task.title = "";
-	//         this.task.description = "";
-	//         this.task.status = "TODO";
-	//       }
-	//   },
-	// }
+	if (task !== undefined) {
+		task.customerId = props.customerId;
+		let promise = taskHandler.edit(task);
+		promise.then((result) => {
+			console.log(result);
+			taskHandler.editTask(task);
+		}, (err) => {
+			console.log(err);
+		})
+	}
+}
+
+function deleteTask(id: BigInt) {
+	let task: Task | undefined = taskHandler.tasks.get(id);
+
+	if (task !== undefined) {
+		task.customerId = props.customerId;
+		let promise = taskHandler.delete(task);
+		promise.then((result) => {
+			console.log(result);
+			taskHandler.deleteTask(id);
+		}, (err) => {
+			console.log(err);
+		})
+	}
+}
+
 </script>
 
 <template>
 <div class="container d-flex flex-row justify-content-center">
     <div class="d-flex flex-column">
         <h2 class="text-center mt-5">Tasks</h2>
-        <div class="card border-0 rounded-4 p-3 shadow task-card" style="max-width: 400px">
-            <div class="task-items row">
-                <div class="col">
-                    <h3 class="task-name fs-4"> Task name </h3>
-                    <p class="task-description"> Task description </p>
-                </div>
-                <div class="col">
-                    <div class="container d-flex flex-column align-items-center">
-                        <div class="card border-0 rounded-5 p-2 task-status-card">
-                            <p class="task-status"> To Do </p>
-                        </div>
-                        <div class="button-container mt-2 d-flex">
-                            <button type="button" class="btn btn-primary" style="margin-right: 10px;">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="container d-flex flex-row">
         </div>
+        <div class="card border-0 rounded-4 p-3 shadow-sm task-card" style="max-width: 512px">
+        	<div class="mb-3">
+	        	<div class="d-flex flex-row align-items-center">
+			        <div class="form-floating me-2">
+				        <input type="text" class="form-control group-input" id="floatingInputGroup1" placeholder="Name your task!" v-model="taskShell.title" @keypress.enter="createTask">
+				        <label for="floatingInputGroup1">Name your task!</label>
+				    </div>
+				    <div class="form-floating">
+				       	<input type="text" class="form-control group-input" id="floatingInputGroup1" placeholder="Give it a description" v-model="taskShell.description">
+				        <label for="floatingInputGroup1">Give it a description</label>
+				    </div>
+				    <div class="submit-btn ms-2">
+				       	<button type="button" class="btn btn-primary" @click="createTask"><i class="bi bi-plus fs-4"></i></button>
+				    </div>
+			    </div>
+			</div>
+			<div class="d-flex justify-content-center">
+				<div class="d-flex flex-column">
+			        <div class="card border-0 rounded-4 p-3 bg-shadow task-card mb-3" style="max-width: 356px" v-for="[id, task] in taskHandler.tasks" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
+			            <div class="task-items row">
+			                <div class="col">
+			                    <h3 class="task-name fs-4"> {{ task.title }} </h3>
+			                    <p class="task-description"> {{ task.description }} </p>
+			                </div>
+			                <div class="col">
+			                    <div class="container d-flex flex-column align-items-center">
+			                        <div class="card border-0 rounded-5 p-2 task-status-card">
+			                            <p class="task-status"> {{ task.status }} </p>
+			                        </div>
+			                        <div class="button-container mt-2 d-flex">
+			                            <button type="button" class="btn btn-primary" style="margin-right: 10px;" @click="editTask(id)">
+			                                <i class="bi bi-pencil"></i>
+			                            </button>
+			                            <button type="button" class="btn btn-primary" @click="deleteTask(id)">
+			                                <i class="bi bi-trash"></i>
+			                            </button>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+		    	</div>
+	    	</div>
+    	</div>
     </div>
 </div>
 </template>
@@ -173,7 +136,80 @@ let taskHandler: TaskHandler = new TaskHandler();
 .bi {
 	color: black;
 }
+
+.bg-shadow {
+	box-shadow: var(--bs-box-shadow-sm) !important;
+	transition: box-shadow 1s;
+}
+
+.bg-shadow:hover {
+	box-shadow: var(--bs-box-shadow) !important;
+}
 </style>
 <style>
+/*=======
+		<div class="container" style="max-width: 600px">
+			<!-- Heading -->
+			<h2 class="text-center mt-5">Task Manager</h2>
+	
+			<!-- Input -->
+			<div class="d-flex mt-5">
+				<input
+					type="text"
+					v-model="taskShell.title"
+					placeholder="Enter task title"
+					class="w-100 form-control"
+				/>
+				<input
+					type="text"
+					v-model="taskShell.description"
+					placeholder="Enter task description"
+					class="w-100 form-control"
+				/>
+				<button class="btn btn-warning rounded-0" @click="createTask">
+					Add
+				</button>
+			</div>
+	
+			<!-- Task table -->
+			<table class="table table-bordered mt-5">
+				<thead>
+					<tr>
+						<th scope="col">Task</th>
+						<th scope="col">Description</th>
+						<th scope="col" style="width: 120px">Status</th>
+						<th scope="col" class="text-center">#</th>
+						<th scope="col" class="text-center">#</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="[id, task] in taskHandler.tasks" :key="id">
+						<td class="text-center">
+								{{ task.title }}
+						</td>
+						<td>
+							{{ task.description }}
+						</td>
+						<td>
+							<span class="pointer noselect">
+								{{ task.status }}
+							</span>
+						</td>
+						<td class="text-center">
+							<button class="btn btn-warning rounded-0" @click="deleteTask(id)">
+								Delete
+							</button>
+						</td>
+						<td class="text-center">
+							<button class="btn btn-warning rounded-0" @click="editTask(id)">
+								Edit
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</template>
+>>>>>>> main*/
 
 </style>
