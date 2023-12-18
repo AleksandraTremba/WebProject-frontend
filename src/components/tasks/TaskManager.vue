@@ -11,6 +11,8 @@ const props = defineProps({
 let taskShell: Task = new Task(0, props.customerId);
 let taskHandler: TaskHandler = reactive(new TaskHandler(props.http));
 
+let mouseOver: boolean = false;
+
 loadData();
 
 function loadData() {
@@ -69,6 +71,83 @@ function deleteTask(id: BigInt) {
 </script>
 
 <template>
+<div class="container d-flex flex-row justify-content-center">
+    <div class="d-flex flex-column">
+        <h2 class="text-center mt-5">Tasks</h2>
+        <div class="container d-flex flex-row">
+        </div>
+        <div class="card border-0 rounded-4 p-3 shadow-sm task-card" style="max-width: 512px">
+        	<div class="mb-3">
+	        	<div class="d-flex flex-row align-items-center">
+			        <div class="form-floating me-2">
+				        <input type="text" class="form-control group-input" id="floatingInputGroup1" placeholder="Name your task!" v-model="taskShell.title" @keypress.enter="createTask">
+				        <label for="floatingInputGroup1">Name your task!</label>
+				    </div>
+				    <div class="form-floating">
+				       	<input type="text" class="form-control group-input" id="floatingInputGroup1" placeholder="Give it a description" v-model="taskShell.description">
+				        <label for="floatingInputGroup1">Give it a description</label>
+				    </div>
+				    <div class="submit-btn ms-2">
+				       	<button type="button" class="btn btn-primary" @click="createTask"><i class="bi bi-plus fs-4"></i></button>
+				    </div>
+			    </div>
+			</div>
+			<div class="d-flex justify-content-center">
+				<div class="d-flex flex-column">
+			        <div class="card border-0 rounded-4 p-3 bg-shadow task-card mb-3" style="max-width: 356px" v-for="[id, task] in taskHandler.tasks" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
+			            <div class="task-items row">
+			                <div class="col">
+			                    <h3 class="task-name fs-4"> {{ task.title }} </h3>
+			                    <p class="task-description"> {{ task.description }} </p>
+			                </div>
+			                <div class="col">
+			                    <div class="container d-flex flex-column align-items-center">
+			                        <div class="card border-0 rounded-5 p-2 task-status-card">
+			                            <p class="task-status"> {{ task.status }} </p>
+			                        </div>
+			                        <div class="button-container mt-2 d-flex">
+			                            <button type="button" class="btn btn-primary" style="margin-right: 10px;" @click="editTask(id)">
+			                                <i class="bi bi-pencil"></i>
+			                            </button>
+			                            <button type="button" class="btn btn-primary" @click="deleteTask(id)">
+			                                <i class="bi bi-trash"></i>
+			                            </button>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+		    	</div>
+	    	</div>
+    	</div>
+    </div>
+</div>
+</template>
+
+<style src="@/assets/colours.css"></style>
+<style setup>
+.task-card {
+	 background-color: var(--coffee-colour) !important;
+}
+.task-status-card {
+    background-color: white !important;
+    border-radius: 8px;
+}
+.bi {
+	color: black;
+}
+
+.bg-shadow {
+	box-shadow: var(--bs-box-shadow-sm) !important;
+	transition: box-shadow 1s;
+}
+
+.bg-shadow:hover {
+	box-shadow: var(--bs-box-shadow) !important;
+}
+</style>
+<style>
+/*=======
 		<div class="container" style="max-width: 600px">
 			<!-- Heading -->
 			<h2 class="text-center mt-5">Task Manager</h2>
@@ -131,15 +210,6 @@ function deleteTask(id: BigInt) {
 			</table>
 		</div>
 	</template>
+>>>>>>> main*/
 
-<style scoped>
-  .pointer {
-    cursor: pointer;
-  }
-  .line-through {
-    text-decoration: line-through;
-  }
-  .task-page-container {
-    width: 1000px;
-  }
 </style>
