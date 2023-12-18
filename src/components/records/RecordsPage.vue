@@ -25,62 +25,7 @@ promise.then((result) => {
   alert("Something has happened to our server...")
   console.log(err);
 })
-
 </script>
-
-<!-- <script>
-export default {
-  data() {
-    return {
-      usersNumber: '0',
-      timersNumber: '0',
-      groupsNumber: '0',
-      tasksNumber: '0',
-    };
-  },
-  mounted() {
-    fetch('http://localhost:8080/api/public/records/users', {
-      method: 'GET',
-    }).then((response) => response.json())
-      .then((data) => {
-        this.usersNumber = data;
-      })
-      .catch((error) => {
-        console.error('Error fetching users data:', error);
-      });
-
-    fetch('http://localhost:8080/api/public/records/timers', {
-      method: 'GET',
-    }).then((response) => response.json())
-      .then((data) => {
-        this.timersNumber = data;
-      })
-      .catch((error) => {
-        console.error('Error fetching timers data:', error);
-      });
-
-    fetch('http://localhost:8080/api/public/records/groups', {
-      method: 'GET',
-    }).then((response) => response.json())
-      .then((data) => {
-        this.groupsNumber = data;
-      })
-      .catch((error) => {
-        console.error('Error fetching groups data:', error);
-      });
-
-    fetch('http://localhost:8080/api/public/records/tasks', {
-      method: 'GET',
-    }).then((response) => response.json())
-      .then((data) => {
-        this.tasksNumber = data;
-      })
-      .catch((error) => {
-        console.error('Error fetching tasks data:', error);
-      });
-  },
-};
-</script> -->
 
 <template>
 
@@ -115,11 +60,19 @@ export default {
 
 </template>
 
+<style src="@/assets/colours.css"></style>
+<style setup>
+.records-card {
+    background-color: var(--coffee-colour) !important;
+    border-radius: 8px;
+}
+</style>
 <style>
 .records-content {
     width: 1000px;
     margin-left: 550px;
 }
+
 .records-header {
     margin-left: 100px;
     margin-top: 50px;

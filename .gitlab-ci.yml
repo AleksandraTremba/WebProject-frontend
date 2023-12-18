@@ -6,6 +6,7 @@ build-job:
   stage: build
   only:
     - dev
+    - main
   script:
     - docker build -t project-okapi-frontend:latest .
 
