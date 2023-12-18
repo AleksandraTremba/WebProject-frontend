@@ -1,12 +1,8 @@
 <script setup>
-  import TopTimer from '../components/TopTimer.vue';
-  import Users from '../components/UsersContainer.vue';
-  import Tasks from '../components/TaskManager.vue';
 </script>
 
 <template>
   <div class="container-fluid">
-   <TopTimer />
     <div class="row">
      <main role="main" class="" style="padding-left: 450px; padding-top: 20px">
       <div class="group-search-content">

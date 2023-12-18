@@ -22,7 +22,6 @@ function retrieveData() {
 		<div class="card border-0 rounded-4 p-3 shadow profile-card">
 			<div class="d-flex flex-column">
 				<div class="customer-picture mb-2">
-					<img src="../../public/profile.jpg" class="img-fluid rounded-circle" />
 				</div>
 				<div class="customer-nickname">
 					<p class="fs-3 fw-bold text-secondary">Nickname</p>

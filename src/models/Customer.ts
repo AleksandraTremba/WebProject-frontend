@@ -6,6 +6,7 @@ interface ICustomer {
 	nickname: string;
 	password: string;
 	newData?: string;
+	groupId?: bigint;
 	timerId?: bigint;
 	token?: string;
 }
@@ -32,6 +33,7 @@ class Customer implements ICustomerNetwork {
 	nickname!: string;
 	password!: string;
 	newData?: string | undefined;
+	groupId?: bigint | undefined;
 	timerId?: bigint | undefined;
 	token?: string | undefined;
 
@@ -50,9 +52,17 @@ class Customer implements ICustomerNetwork {
 		});
 	}
 
+	public jsonifyPub(): string {
+		return JSON.stringify({
+			id: this.id,
+			username: this.nickname,
+		});
+	}
+
 	private loadData(data: Customer) {
 		this.id = data.id;
 		this.nickname = data.nickname;
+		this.groupId = data.groupId;
 		this.timerId = data.timerId;
 		this.token = data.token;
 	}
@@ -71,10 +81,7 @@ class Customer implements ICustomerNetwork {
 	}
 
 	login2(copy: Customer): void {
-		console.log(copy.id);
-		console.log(this.id);
 		this.loadData(copy);
-		console.log(this.id);
 		this.storage.write('user-token', this.token);
 	}
 
@@ -121,6 +128,7 @@ class Customer implements ICustomerNetwork {
 		let tCustomer: ICustomer;
 		tCustomer.id = this.id;
 		tCustomer.nickname = this.nickname;
+		tCustomer.groupId = this.groupId;
 		tCustomer.timerId = this.timerId;
 		tCustomer.token = this.token;
 
