@@ -19,7 +19,8 @@ class HttpClient implements IHttpClient {
 	}
 
 	getURL(): string {
-		return this.port + "/api";
+		// return this.port + "/api";
+		return '/api';
 	}
 
 	injectSecurityHeader(token: string): void {
